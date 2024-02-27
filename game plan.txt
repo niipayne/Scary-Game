@@ -1,0 +1,30 @@
+Features
+1. Make a map that works
+   - need to build a proper maze
+   - possibly create chunks
+   - reasearch algorithm
+2. Frist person view
+   - place character in map
+   - be able to move and turn character with camera
+3. Flashlight
+   - have flashlight from POV of character 
+   - be able to turn on with button
+   - battery, could use timer
+4. Chaser/Seeker
+   - place c/s in map and have it move
+   - have it chase character through maze
+5. Evading flashlight
+   - c/s avoids when in flashlight light
+6. Collision detection
+   - win/lose  condition for being caught or reaching goal
+7. map objects
+   - batterie pickup
+   - goal
+   - timer 
+     - game timer till over
+     - enemy gets more aggressive
+     - mad dash for you no flashlight protction
+8. Game options
+   - point system
+   - get as far as you can (highscore)
+   - level based
