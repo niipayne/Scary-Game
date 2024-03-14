@@ -1,15 +1,21 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GameMap } from './Game/World/GameMap.js';
-import { Character } from './Game/Behaviour/Character.js';
-import { NPC } from './Game/Behaviour/NPC.js';
-import { Player } from './Game/Behaviour/Player.js';
-import { Controller} from './Game/Behaviour/Controller.js';
-import { TileNode } from './Game/World/TileNode.js';
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GameMap } from "./Game/World/GameMap.js";
+import { Character } from "./Game/Behaviour/Character.js";
+import { NPC } from "./Game/Behaviour/NPC.js";
+import { Player } from "./Game/Behaviour/Player.js";
+import { Controller } from "./Game/Behaviour/Controller.js";
+import { TileNode } from "./Game/World/TileNode.js";
+import { FirstPersonCamera } from "./Game/World/firstPersonView.js";
 
 // Create Scene
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+	75,
+	window.innerWidth / window.innerHeight,
+	0.1,
+	1000
+);
 const renderer = new THREE.WebGLRenderer();
 
 const orbitControls = new OrbitControls(camera, renderer.domElement);
@@ -29,16 +35,13 @@ const player = new Player(new THREE.Color(0xff0000));
 // Create NPC
 let npc = new NPC(new THREE.Color(0x000000));
 
+let fpCamera = new FirstPersonCamera(camera);
 
 // Setup our scene
 function setup() {
-
 	scene.background = new THREE.Color(0xffffff);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
-
-	camera.position.y = 65;
-	camera.lookAt(0,0,0);
 
 	//Create Light
 	let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
@@ -49,19 +52,16 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
-
 	// Add the characters to the scene
 	scene.add(npc.gameObject);
 	scene.add(player.gameObject);
 
 	// Get a random starting place for the enemy
 	// let startNPC = gameMap.graph.getRandomEmptyTile();
-	let startNPC = gameMap.graph.getNode(9,0);
+	let startNPC = gameMap.graph.getNode(9, 0);
 
 	// let startPlayer = gameMap.graph.getRandomEmptyTile();
-	let startPlayer = gameMap.graph.getNode(0,0);
-
-
+	let startPlayer = gameMap.graph.getNode(0, 0);
 
 	// this is where we start the NPC
 	npc.location = gameMap.localize(startNPC);
@@ -71,17 +71,21 @@ function setup() {
 
 	npc.path = gameMap.astar(startNPC, startPlayer);
 
+	const axesHelper = new THREE.AxesHelper(100);
+	scene.add(axesHelper);
+
+	const gridHelper = new THREE.GridHelper(100, 100);
+	scene.add(gridHelper);
 
 	//First call to animate
 	animate();
 }
 
-
 // animate
 function animate() {
 	requestAnimationFrame(animate);
 	renderer.render(scene, camera);
-	
+
 	let deltaTime = clock.getDelta();
 
 	let steer = npc.followPlayer(gameMap, player);
@@ -89,10 +93,9 @@ function animate() {
 
 	npc.update(deltaTime, gameMap);
 	player.update(deltaTime, gameMap, controller);
- 
-	orbitControls.update();
+
+	// orbitControls.update();
+	fpCamera.update(deltaTime);
 }
-
-
 
 setup();
