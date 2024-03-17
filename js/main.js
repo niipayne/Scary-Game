@@ -18,7 +18,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-const orbitControls = new OrbitControls(camera, renderer.domElement);
+// const orbitControls = new OrbitControls(camera, renderer.domElement);
 
 // Create GameMap
 const gameMap = new GameMap();
@@ -35,7 +35,9 @@ const player = new Player(new THREE.Color(0xff0000));
 // Create NPC
 let npc = new NPC(new THREE.Color(0x000000));
 
-let fpCamera = new FirstPersonCamera(camera);
+let fpCamera = new FirstPersonCamera(camera, renderer.domElement, scene);
+
+fpCamera.getObject(scene);
 
 // Setup our scene
 function setup() {
@@ -95,7 +97,7 @@ function animate() {
 	player.update(deltaTime, gameMap, controller);
 
 	// orbitControls.update();
-	fpCamera.update(deltaTime);
+	fpCamera.update(deltaTime, scene);
 }
 
 setup();
