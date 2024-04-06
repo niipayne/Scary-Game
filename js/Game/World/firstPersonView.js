@@ -4,10 +4,11 @@ import * as THREE from "three";
 export class FirstPersonCamera {
 	constructor(camera, domElement, scene) {
 		this.camera = camera;
-		this.camera.position.y = 25;
+		this.camera.position.y = 7;
 		this.domElement = domElement;
 		this.velocity = new THREE.Vector3();
 		this.direction = new THREE.Vector3();
+		this.spotLight = new THREE.SpotLight(0xffffff, 2);
 		this.scene = scene;
 		this.controls = new PointerLockControls(camera, domElement);
 
@@ -17,14 +18,18 @@ export class FirstPersonCamera {
 		this.moveRight = false;
 		this.canJump = false;
 		this.setup(this.controls);
+		this.flashlight = true;
 	}
 
 	setup(controls) {
 		const blocker = document.getElementById("blocker");
 		const instructions = document.getElementById("instructions");
 
+		this.camera.add(this.spotLight);
+		this.spotLight.target.position.z = -3;
+		this.camera.add(this.spotLight.target);
+
 		instructions.addEventListener("click", function () {
-			console.log(this.controls);
 			controls.lock();
 		});
 
@@ -40,6 +45,17 @@ export class FirstPersonCamera {
 
 		document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
+		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
+	}
+
+	flashOn(event) {
+		if (this.flashlight) {
+			this.flashlight = false;
+			this.spotLight.intensity = 0;
+		} else {
+			this.flashlight = true;
+			this.spotLight.intensity = 1;
+		}
 	}
 
 	onKeyDown(event) {
@@ -97,8 +113,8 @@ export class FirstPersonCamera {
 
 	update(deltaTime, scene) {
 		// console.log(this.moveBackward);
-		this.velocity.x -= this.velocity.x * 10.0 * deltaTime;
-		this.velocity.z -= this.velocity.z * 10.0 * deltaTime;
+		this.velocity.x -= this.velocity.x * 25.0 * deltaTime;
+		this.velocity.z -= this.velocity.z * 25.0 * deltaTime;
 
 		// this.velocity.y -= 9.8 * 100.0 * deltaTime;
 
@@ -111,17 +127,10 @@ export class FirstPersonCamera {
 		if (this.moveLeft || this.moveRight)
 			this.velocity.x -= this.direction.x * 400.0 * deltaTime;
 
-		// console.log(this.moveForward);
 		this.controls.moveRight(-this.velocity.x * deltaTime);
 		this.controls.moveForward(-this.velocity.z * deltaTime);
-		// console.log(this.velocity.x);
 
 		this.controls.getObject(scene).position.y += this.velocity.y * deltaTime;
-
-		// if (this.controls.getObject().position.y < 10) {
-		// 	this.velocity.y = 0;
-		// 	this.canJump = true;
-		// }
 	}
 
 	getObject(scene) {

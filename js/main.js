@@ -18,7 +18,10 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-// const orbitControls = new OrbitControls(camera, renderer.domElement);
+// let spotlight = new THREE.SpotLight(0xffffff, 10, 150, Math.PI * 0.2);
+// camera.add(spotlight);
+// camera.add(spotlight.target);
+// scene.add(spotlight);
 
 // Create GameMap
 const gameMap = new GameMap();
@@ -45,10 +48,12 @@ function setup() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
-	//Create Light
-	let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-	directionalLight.position.set(0, 5, 5);
-	scene.add(directionalLight);
+	// let spotLight = new THREE.SpotLight(0xffffff, 0.6, 0, Math.PI * 0.05);
+	// camera.add(spotLight);
+	// camera.add(spotLight.target);
+
+	// const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+	// scene.add(spotLightHelper);
 
 	// initialize our gameMap
 	gameMap.init(scene);
