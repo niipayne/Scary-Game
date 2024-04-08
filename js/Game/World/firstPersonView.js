@@ -8,7 +8,7 @@ export class FirstPersonCamera {
 		this.domElement = domElement;
 		this.velocity = new THREE.Vector3();
 		this.direction = new THREE.Vector3();
-		this.spotLight = new THREE.SpotLight(0xffffff, 2);
+		this.spotLight = new THREE.SpotLight(0xffffff, 4, 100, Math.PI/5, 0, 1);
 		this.scene = scene;
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
@@ -27,8 +27,10 @@ export class FirstPersonCamera {
 		const instructions = document.getElementById("instructions");
 
 		this.camera.add(this.spotLight);
-		this.spotLight.target.position.z = -3;
+		// this.spotLight.target.position.z = -3;
 		this.camera.add(this.spotLight.target);
+		this.spotLight.position.set(0, 0, 1);
+		this.spotLight.target = this.camera
 
 		instructions.addEventListener("click", function () {
 			controls.lock();

@@ -24,44 +24,54 @@ export class Graph {
 	initGraph() {
 		// Create a new tile node
 		// for each index in the grid
-		
-		let hard_graph = [
-			[6],
-			[1,3,4,6,8,9],
-			[1,4,6],
-			[2,4,7,8],
-			[0,2,4,5,8],
-			[2,6],
-			[1,2,3,4,6,7,8,9],
-			[4,6],
-			[0,1,2,4,6,8],
-			[4,8]
-		]
-
 		for (let j = 0; j < this.rows; j++) {
 			for (let i = 0; i < this.cols; i++) {
 
 				let type = TileNode.Type.Ground;
 				let node = new TileNode(this.nodes.length, i, j, type);
 
-				
-				let obs = Math.random();
-				// console.log(hard_graph[i].includes(i))
-				if (hard_graph[j].includes(i))
-				{
-					node.type = TileNode.Type.Obstacle;
-					this.obstacles.push(node);
-				
-				}
-				if (i == 9 && j == 9){
-					node.type = TileNode.Type.End;
-				}
-
 				this.nodes.push(node);
 			}
-		}
+		} 
+		// let hard_graph = [
+		// 	[6],
+		// 	[1,3,4,6,8,9],
+		// 	[1,4,6],
+		// 	[2,4,7,8],
+		// 	[0,2,4,5,8],
+		// 	[2,6],
+		// 	[1,2,3,4,6,7,8,9],
+		// 	[4,6],
+		// 	[0,1,2,4,6,8],
+		// 	[4,8]
+		// ]
 
+		// for (let j = 0; j < this.rows; j++) {
+		// 	for (let i = 0; i < this.cols; i++) {
+
+		// 		let type = TileNode.Type.Ground;
+		// 		let node = new TileNode(this.nodes.length, i, j, type);
+
+				
+		// 		let obs = Math.random();
+		// 		// console.log(hard_graph[i].includes(i))
+		// 		if (hard_graph[j].includes(i))
+		// 		{
+		// 			node.type = TileNode.Type.Obstacle;
+		// 			this.obstacles.push(node);
+				
+		// 		}
+		// 		if (i == 9 && j == 9){
+		// 			node.type = TileNode.Type.End;
+		// 		}
+
+		// 		this.nodes.push(node);
+		// 	}
+		// }
 		
+	}
+
+	initEdges() {
 		// Create west, east, north, south
 		// edges for each node in our graph
 		for (let j = 0; j < this.rows; j++) {
