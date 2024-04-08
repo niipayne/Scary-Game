@@ -7,6 +7,7 @@ import { Player } from "./Game/Behaviour/Player.js";
 import { Controller } from "./Game/Behaviour/Controller.js";
 import { TileNode } from "./Game/World/TileNode.js";
 import { FirstPersonCamera } from "./Game/World/firstPersonView.js";
+import Stats from "three/examples/jsm/libs/stats.module";
 
 import { Scary } from "./Game/Behaviour/Scary.js";
 
@@ -37,7 +38,15 @@ let npc = new NPC(new THREE.Color(0x000000));
 
 let scary = new Scary(scene);
 
-let fpCamera = new FirstPersonCamera(camera, renderer.domElement, scene);
+let fpCamera = new FirstPersonCamera(
+	camera,
+	renderer.domElement,
+	scene,
+	gameMap
+);
+
+const stats = new Stats();
+document.body.appendChild(stats.dom);
 
 fpCamera.getObject(scene);
 
@@ -80,14 +89,25 @@ function setup() {
 	const gridHelper = new THREE.GridHelper(100, 100);
 	scene.add(gridHelper);
 
+	window.addEventListener("resize", onWindowResize, false);
+
 	//First call to animate
 	animate();
+}
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.render(scene, camera);
 }
 
 // animate
 function animate() {
 	requestAnimationFrame(animate);
 	renderer.render(scene, camera);
+
+	stats.update();
 
 	let deltaTime = clock.getDelta();
 
@@ -101,7 +121,7 @@ function animate() {
 	player.update(deltaTime, gameMap, controller);
 
 	fpCamera.update(deltaTime, scene);
-	scary.update(deltaTime);
+	scary.update(deltaTime, gameMap);
 }
 
 setup();

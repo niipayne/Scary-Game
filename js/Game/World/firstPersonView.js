@@ -2,7 +2,7 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
 import * as THREE from "three";
 
 export class FirstPersonCamera {
-	constructor(camera, domElement, scene) {
+	constructor(camera, domElement, scene, gameMap) {
 		this.camera = camera;
 		this.camera.position.y = 7;
 		this.domElement = domElement;
@@ -11,6 +11,7 @@ export class FirstPersonCamera {
 		this.spotLight = new THREE.SpotLight(0xffffff, 2);
 		this.scene = scene;
 		this.controls = new PointerLockControls(camera, domElement);
+		this.gameMap = gameMap;
 
 		this.moveForward = false;
 		this.moveBackward = false;
@@ -112,11 +113,8 @@ export class FirstPersonCamera {
 	}
 
 	update(deltaTime, scene) {
-		// console.log(this.moveBackward);
 		this.velocity.x -= this.velocity.x * 25.0 * deltaTime;
 		this.velocity.z -= this.velocity.z * 25.0 * deltaTime;
-
-		// this.velocity.y -= 9.8 * 100.0 * deltaTime;
 
 		this.direction.z = Number(this.moveForward) - Number(this.moveBackward);
 		this.direction.x = Number(this.moveRight) - Number(this.moveLeft);

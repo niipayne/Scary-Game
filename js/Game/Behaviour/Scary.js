@@ -19,6 +19,44 @@ export class Scary {
 		this.path = [];
 	}
 
+	// check edges
+	checkEdges(gameMap) {
+		this.location = this.object.position;
+		let node = gameMap.quantize(this.location);
+		let nodeLocation = gameMap.localize(node);
+
+		if (!node.hasEdgeTo(node.x - 1, node.z)) {
+			let nodeEdge = nodeLocation.x - gameMap.tileSize / 2;
+			let characterEdge = this.location.x - this.size / 2;
+			if (characterEdge < nodeEdge) {
+				this.location.x = nodeEdge + this.size / 2;
+			}
+		}
+
+		if (!node.hasEdgeTo(node.x + 1, node.z)) {
+			let nodeEdge = nodeLocation.x + gameMap.tileSize / 2;
+			let characterEdge = this.location.x + this.size / 2;
+			if (characterEdge > nodeEdge) {
+				this.location.x = nodeEdge - this.size / 2;
+			}
+		}
+		if (!node.hasEdgeTo(node.x, node.z - 1)) {
+			let nodeEdge = nodeLocation.z - gameMap.tileSize / 2;
+			let characterEdge = this.location.z - this.size / 2;
+			if (characterEdge < nodeEdge) {
+				this.location.z = nodeEdge + this.size / 2;
+			}
+		}
+
+		if (!node.hasEdgeTo(node.x, node.z + 1)) {
+			let nodeEdge = nodeLocation.z + gameMap.tileSize / 2;
+			let characterEdge = this.location.z + this.size / 2;
+			if (characterEdge > nodeEdge) {
+				this.location.z = nodeEdge - this.size / 2;
+			}
+		}
+	}
+
 	seek(target) {
 		let desired = new THREE.Vector3();
 		desired.subVectors(target, this.object.position);
@@ -41,7 +79,7 @@ export class Scary {
 		const loader = new FBXLoader();
 		loader.setPath("js/Resources/Scary Zombie Pack/");
 		loader.load("Ch30_nonPBR.fbx", (fbx) => {
-			fbx.scale.setScalar(0.08);
+			fbx.scale.setScalar(0.05);
 			fbx.traverse((c) => {
 				c.castShadow = true;
 			});
@@ -111,7 +149,8 @@ export class Scary {
 		return this.simpleFollow(gameMap);
 	}
 
-	update(deltaTime) {
+	update(deltaTime, gameMap) {
+		this.checkEdges(gameMap);
 		this.mixer.map((m) => m.update(deltaTime));
 		this.velocity.addScaledVector(this.acceleration, deltaTime);
 
