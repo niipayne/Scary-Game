@@ -8,6 +8,8 @@ import { Controller } from "./Game/Behaviour/Controller.js";
 import { TileNode } from "./Game/World/TileNode.js";
 import { FirstPersonCamera } from "./Game/World/firstPersonView.js";
 
+import { Scary } from "./Game/Behaviour/Scary.js";
+
 // Create Scene
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
@@ -17,11 +19,6 @@ const camera = new THREE.PerspectiveCamera(
 	1000
 );
 const renderer = new THREE.WebGLRenderer();
-
-// let spotlight = new THREE.SpotLight(0xffffff, 10, 150, Math.PI * 0.2);
-// camera.add(spotlight);
-// camera.add(spotlight.target);
-// scene.add(spotlight);
 
 // Create GameMap
 const gameMap = new GameMap();
@@ -38,6 +35,8 @@ const player = new Player(new THREE.Color(0xff0000));
 // Create NPC
 let npc = new NPC(new THREE.Color(0x000000));
 
+let scary = new Scary(scene);
+
 let fpCamera = new FirstPersonCamera(camera, renderer.domElement, scene);
 
 fpCamera.getObject(scene);
@@ -48,16 +47,13 @@ function setup() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
-	// let spotLight = new THREE.SpotLight(0xffffff, 0.6, 0, Math.PI * 0.05);
-	// camera.add(spotLight);
-	// camera.add(spotLight.target);
-
-	// const spotLightHelper = new THREE.SpotLightHelper(spotLight);
-	// scene.add(spotLightHelper);
-
 	// initialize our gameMap
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
+
+	// let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+	// directionalLight.position.set(0, 5, 5);
+	// scene.add(directionalLight);
 
 	// Add the characters to the scene
 	scene.add(npc.gameObject);
@@ -98,11 +94,14 @@ function animate() {
 	let steer = npc.followPlayer(gameMap, player);
 	npc.applyForce(steer);
 
+	let follow = scary.followPlayer(gameMap, camera);
+	scary.applyForce(follow);
+
 	npc.update(deltaTime, gameMap);
 	player.update(deltaTime, gameMap, controller);
 
-	// orbitControls.update();
 	fpCamera.update(deltaTime, scene);
+	scary.update(deltaTime);
 }
 
 setup();
