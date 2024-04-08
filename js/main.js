@@ -79,7 +79,7 @@ function setup() {
 	let startPlayer = gameMap.graph.getNode(0, 0);
 
 	// this is where we start the NPC
-	npc.location = gameMap.localize(startNPC); 
+	npc.location = gameMap.localize(startNPC);
 
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);

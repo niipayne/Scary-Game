@@ -20,7 +20,7 @@ export class FirstPersonCamera {
 		this.canJump = false;
 		this.setup(this.controls);
 		this.flashlight = true;
-		this.size = 1;
+		this.size = 1.5;
 	}
 
 	setup(controls) {
@@ -79,7 +79,7 @@ export class FirstPersonCamera {
 				location.z = nodeEdge + this.size / 2;
 			}
 		}
-
+		
 		if (!node.hasEdgeTo(node.x, node.z + 1)) {
 			let nodeEdge = nodeLocation.z + gameMap.tileSize / 2;
 			let characterEdge = location.z + this.size / 2;
