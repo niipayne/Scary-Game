@@ -8,7 +8,7 @@ export class FirstPersonCamera {
 		this.domElement = domElement;
 		this.velocity = new THREE.Vector3();
 		this.direction = new THREE.Vector3();
-		this.spotLight = new THREE.SpotLight(0xffffff, 4, 100, Math.PI/5, 0, 1);
+		this.spotLight = new THREE.SpotLight(0xffffff, 4, 100, Math.PI / 5, 0, 1);
 		this.scene = scene;
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
@@ -20,6 +20,7 @@ export class FirstPersonCamera {
 		this.canJump = false;
 		this.setup(this.controls);
 		this.flashlight = true;
+		this.size = 1;
 	}
 
 	setup(controls) {
@@ -27,10 +28,9 @@ export class FirstPersonCamera {
 		const instructions = document.getElementById("instructions");
 
 		this.camera.add(this.spotLight);
-		// this.spotLight.target.position.z = -3;
 		this.camera.add(this.spotLight.target);
 		this.spotLight.position.set(0, 0, 1);
-		this.spotLight.target = this.camera
+		this.spotLight.target = this.camera;
 
 		instructions.addEventListener("click", function () {
 			controls.lock();
@@ -49,6 +49,44 @@ export class FirstPersonCamera {
 		document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
 		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
+	}
+
+	// check edges
+	checkEdges(gameMap) {
+		let location = this.camera.position;
+		let node = gameMap.quantize(location);
+		let nodeLocation = gameMap.localize(node);
+
+		if (!node.hasEdgeTo(node.x - 1, node.z)) {
+			let nodeEdge = nodeLocation.x - gameMap.tileSize / 2;
+			let characterEdge = location.x - this.size / 2;
+			if (characterEdge < nodeEdge) {
+				location.x = nodeEdge + this.size / 2;
+			}
+		}
+
+		if (!node.hasEdgeTo(node.x + 1, node.z)) {
+			let nodeEdge = nodeLocation.x + gameMap.tileSize / 2;
+			let characterEdge = location.x + this.size / 2;
+			if (characterEdge > nodeEdge) {
+				location.x = nodeEdge - this.size / 2;
+			}
+		}
+		if (!node.hasEdgeTo(node.x, node.z - 1)) {
+			let nodeEdge = nodeLocation.z - gameMap.tileSize / 2;
+			let characterEdge = location.z - this.size / 2;
+			if (characterEdge < nodeEdge) {
+				location.z = nodeEdge + this.size / 2;
+			}
+		}
+
+		if (!node.hasEdgeTo(node.x, node.z + 1)) {
+			let nodeEdge = nodeLocation.z + gameMap.tileSize / 2;
+			let characterEdge = location.z + this.size / 2;
+			if (characterEdge > nodeEdge) {
+				location.z = nodeEdge - this.size / 2;
+			}
+		}
 	}
 
 	flashOn(event) {
@@ -115,6 +153,8 @@ export class FirstPersonCamera {
 	}
 
 	update(deltaTime, scene) {
+		this.checkEdges(this.gameMap);
+
 		this.velocity.x -= this.velocity.x * 25.0 * deltaTime;
 		this.velocity.z -= this.velocity.z * 25.0 * deltaTime;
 
