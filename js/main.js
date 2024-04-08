@@ -20,6 +20,8 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
+const orbitControls = new OrbitControls(camera, renderer.domElement);
+
 // Create GameMap
 const gameMap = new GameMap();
 
@@ -51,9 +53,10 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
-	// let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-	// directionalLight.position.set(0, 5, 5);
-	// scene.add(directionalLight);
+	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
+	let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+	directionalLight.position.set(0, 5, 5);
+	scene.add(directionalLight);
 
 	// Add the characters to the scene
 	scene.add(npc.gameObject);
@@ -67,7 +70,7 @@ function setup() {
 	let startPlayer = gameMap.graph.getNode(0, 0);
 
 	// this is where we start the NPC
-	npc.location = gameMap.localize(startNPC);
+	npc.location = gameMap.localize(startNPC); 
 
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);

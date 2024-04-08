@@ -3,15 +3,20 @@ import * as THREE from "three";
 import { MapRenderer } from "./MapRenderer";
 import { Graph } from "./Graph";
 import { PriorityQueue } from "../../Util/PriorityQueue";
+import { MazeGenerator } from './MazeGenerator.js';
 import { VectorUtil } from "../../Util/VectorUtil";
 
 export class GameMap {
 	// Constructor for our GameMap class
 	constructor() {
-		this.start = new THREE.Vector3(-25, 0, -25);
+		// this.start = new THREE.Vector3(-25, 0, -25);
 
-		this.width = 50;
-		this.depth = 50;
+		// this.width = 50;
+		// this.depth = 50;
+		this.start = new THREE.Vector3(-50,0,-35);
+
+		this.width = 100;
+		this.depth = 70;
 
 		// We also need to define a tile size
 		// for our tile based map
@@ -29,13 +34,17 @@ export class GameMap {
 		// Create our map renderer
 		this.mapRenderer = new MapRenderer(this.start, this.tileSize, this.cols);
 
-		this.flowfield = new Map();
-		this.goal = null;
+		// this.flowfield = new Map();
+		this.goals = [];
 	}
 
 	init(scene) {
 		this.scene = scene;
 		this.graph.initGraph();
+		this.graph.initEdges();
+
+		let mazeGenerator = new MazeGenerator(this.graph);
+		mazeGenerator.generate();
 		// Set the game object to our rendering
 		this.gameObject = this.mapRenderer.createRendering(this.graph.nodes);
 	}
