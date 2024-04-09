@@ -22,7 +22,7 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 
 const orbitControls = new OrbitControls(camera, renderer.domElement);
-
+// orbitControls.addEventListener('change', renderer);
 // Create GameMap
 const gameMap = new GameMap();
 
@@ -38,7 +38,7 @@ const player = new Player(new THREE.Color(0xff0000));
 // Create NPC
 let npc = new NPC(new THREE.Color(0x000000));
 
-let scary = new Scary(scene);
+// let scary = new Scary(scene);
 
 let fpCamera = new FirstPersonCamera(
 	camera,
@@ -62,8 +62,11 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
+
+
+	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
 	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
-	let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+	// let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 	directionalLight.position.set(0, 5, 5);
 	scene.add(directionalLight);
 
@@ -94,6 +97,11 @@ function setup() {
 
 	window.addEventListener("resize", onWindowResize, false);
 
+	camera.position.x = -32;
+	camera.position.z = -32;
+	camera.position.y = 55;
+	// camera.position.y = 7;
+
 	//First call to animate
 	animate();
 }
@@ -117,14 +125,14 @@ function animate() {
 	let steer = npc.followPlayer(gameMap, player);
 	npc.applyForce(steer);
 
-	let follow = scary.followPlayer(gameMap, camera);
-	scary.applyForce(follow);
+	// let follow = scary.followPlayer(gameMap, camera);
+	// scary.applyForce(follow);
 
 	npc.update(deltaTime, gameMap);
-	player.update(deltaTime, gameMap, controller);
+	player.update(deltaTime, gameMap, controller, camera);
 
 	fpCamera.update(deltaTime, scene);
-	scary.update(deltaTime, gameMap);
+	// scary.update(deltaTime, gameMap);
 }
 
 setup();

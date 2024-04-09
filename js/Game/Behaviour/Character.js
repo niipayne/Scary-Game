@@ -8,12 +8,18 @@ export class Character {
 
 		this.size = 2;
 
+		let mesh;
 		// Create our cone geometry and material
-		let coneGeo = new THREE.ConeGeometry(this.size/2, this.size, 10);
-		let coneMat = new THREE.MeshStandardMaterial({color: mColor});
-		
-		// Create the local cone mesh (of type Object3D)
-		let mesh = new THREE.Mesh(coneGeo, coneMat);
+		if (mColor.equals(new THREE.Color(0xff0000))) {
+			let geometry2 = new THREE.SphereGeometry(this.size/2, this.size, 10);
+			let material2 = new THREE.MeshLambertMaterial({color: 0x0000ff, transparent: true, opacity:0.0});
+			mesh = new THREE.Mesh(geometry2, material2);
+		} else {
+			let coneGeo = new THREE.ConeGeometry(this.size/2, this.size, 10);
+			let coneMat = new THREE.MeshStandardMaterial({color: mColor});
+			mesh = new THREE.Mesh(coneGeo, coneMat);
+		}
+
 		// Increment the y position so our cone is just atop the y origin
 		mesh.position.y = mesh.position.y+1;
 		// Rotate our X value of the mesh so it is facing the +z axis

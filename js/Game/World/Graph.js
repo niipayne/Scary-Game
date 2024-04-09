@@ -30,45 +30,18 @@ export class Graph {
 				let type = TileNode.Type.Ground;
 				let node = new TileNode(this.nodes.length, i, j, type);
 
+
 				this.nodes.push(node);
 			}
 		} 
-		// let hard_graph = [
-		// 	[6],
-		// 	[1,3,4,6,8,9],
-		// 	[1,4,6],
-		// 	[2,4,7,8],
-		// 	[0,2,4,5,8],
-		// 	[2,6],
-		// 	[1,2,3,4,6,7,8,9],
-		// 	[4,6],
-		// 	[0,1,2,4,6,8],
-		// 	[4,8]
-		// ]
 
-		// for (let j = 0; j < this.rows; j++) {
-		// 	for (let i = 0; i < this.cols; i++) {
+		this.nodes.pop();
+		let type = TileNode.Type.End;
+		let node = new TileNode(this.nodes.length, 13, 13, type);
 
-		// 		let type = TileNode.Type.Ground;
-		// 		let node = new TileNode(this.nodes.length, i, j, type);
 
-				
-		// 		let obs = Math.random();
-		// 		// console.log(hard_graph[i].includes(i))
-		// 		if (hard_graph[j].includes(i))
-		// 		{
-		// 			node.type = TileNode.Type.Obstacle;
-		// 			this.obstacles.push(node);
-				
-		// 		}
-		// 		if (i == 9 && j == 9){
-		// 			node.type = TileNode.Type.End;
-		// 		}
+		this.nodes.push(node);
 
-		// 		this.nodes.push(node);
-		// 	}
-		// }
-		
 	}
 
 	initEdges() {
