@@ -45,7 +45,7 @@ export class SprintState extends State {
 	}
 
 	updateState(enemy) {
-		enemy.topSpeed = 25;
+		enemy.topSpeed = 10;
 		enemy.applyForce(enemy.followPlayer(enemy.gameMap, enemy.camera));
 
 		if (
@@ -58,11 +58,11 @@ export class SprintState extends State {
 
 export class FleeingState extends State {
 	enterState(enemy) {
-		console.log("HEHEHHEHEHEHE");
+		console.log("AHHHHHHHHHHHHHHHHHH");
 	}
 
 	updateState(enemy) {
-		enemy.topSpeed = 25;
+		enemy.topSpeed = 5;
 		enemy.applyForce(enemy.followPlayer(enemy.gameMap, enemy.camera));
 
 		if (

@@ -15,7 +15,7 @@ export class FirstPersonCamera {
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
 
-		this.raycaster = new THREE.Raycaster();
+		// this.raycaster = new THREE.Raycaster();
 
 		this.moveForward = false;
 		this.moveBackward = false;
@@ -39,8 +39,8 @@ export class FirstPersonCamera {
 		this.spotLight.position.set(0, 0, 1);
 		this.spotLight.target = this.camera;
 
-		this.raycaster.setFromCamera(new THREE.Vector2(this.camera.quaternion.x, this.camera.quaternion.z), this.camera)
-		const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
+		// this.raycaster.setFromCamera(new THREE.Vector2(this.camera.quaternion.x, this.camera.quaternion.z), this.camera)
+		// const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
 
 		instructions.addEventListener("click", function () {
 			controls.lock();
@@ -108,9 +108,8 @@ export class FirstPersonCamera {
 		if (this.haveBatterys) {
 			this.flashlight = true;
 			this.spotLight.intensity = 1;
-			// console.log(this.spotLight);
-			const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
-			console.log(intersecs[0])
+			// const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
+			// console.log(intersecs[0])
 		}
 	}
 
@@ -170,8 +169,8 @@ export class FirstPersonCamera {
 	}
 
 	moveMent(deltaTime) {
-		this.velocity.x -= this.velocity.x * 40.0 * deltaTime;
-		this.velocity.z -= this.velocity.z * 40.0 * deltaTime;
+		this.velocity.x -= this.velocity.x * 70.0 * deltaTime;
+		this.velocity.z -= this.velocity.z * 70.0 * deltaTime;
 
 		this.direction.z = Number(this.moveForward) - Number(this.moveBackward);
 		this.direction.x = Number(this.moveRight) - Number(this.moveLeft);

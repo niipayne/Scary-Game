@@ -28,12 +28,15 @@ let cameraBattery = 20;
 let haveBattery = true;
 let batteryStr = '||||||||||||||||||||';
 
+let dangerBar = 20;
+let dargerStr = '||||||||||||||||||||';
+
 // Create GameMap
 const gameMap = new GameMap();
 const clock = new THREE.Clock();
 const controller = new Controller(document);
 const player = new Player(new THREE.Color(0xff0000));
-let npc = new NPC(new THREE.Color(0x000000));
+// let npc = new NPC(new THREE.Color(0x000000));
 
 let scary = new EnemyState(scene, gameMap, camera);
 
@@ -64,14 +67,14 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
-	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
-	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
+	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
+	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
 	// let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 	directionalLight.position.set(0, 5, 5);
 	scene.add(directionalLight);
 
 	// Add the characters to the scene
-	scene.add(npc.gameObject);
+	// scene.add(npc.gameObject);
 	scene.add(player.gameObject);
 
 	// Get a random starting places
@@ -82,9 +85,9 @@ function setup() {
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);
 	// this is where we start the NPC
-	npc.location = gameMap.localize(startNPC);
+	// npc.location = gameMap.localize(startNPC);
 
-	npc.path = gameMap.astar(startNPC, startPlayer);
+	// npc.path = gameMap.astar(startNPC, startPlayer);
 
 	const axesHelper = new THREE.AxesHelper(100);
 	scene.add(axesHelper);
@@ -96,10 +99,10 @@ function setup() {
 
 	camera.position.x = -32;
 	camera.position.z = -32;
-	camera.position.y = 55;
+	// camera.position.y = 55;
 
 	camera.lookAt(0,0,0)
-	// camera.position.y = 7;
+	camera.position.y = 7;
 
 	//First call to animate
 	animate();
@@ -123,43 +126,46 @@ function animate() {
 	
 	let deltaTime = clock.getDelta();
 	
-	let steer = npc.followPlayer(gameMap, player);
-	npc.applyForce(steer);
+	// let steer = npc.followPlayer(gameMap, player);
+	// npc.applyForce(steer);
 
-	// let follow = scary.followPlayer(gameMap, camera);
-	// scary.applyForce(follow);
+	let follow = scary.followPlayer(gameMap, camera);
+	scary.applyForce(follow);
 
 	if (cameraBattery < timer.getElapsed()) {
 		haveBattery = false
 	}
 
-	npc.update(deltaTime, gameMap);
+	// npc.update(deltaTime, gameMap);
 	player.update(deltaTime, gameMap, controller, camera);
 	fpCamera.update(deltaTime, scene, haveBattery, camera);
 	
 	let node = gameMap.quantize(player.location);
+	let scary_node = gameMap.quantize(scary.location);
 	if (node.type == TileNode.Type.Battery) {
 		gameMap.graph.getNode(node.x, node.z).type = TileNode.Type.Ground;
-		batteryStr += '||||||||||';
-		cameraBattery += 10;
+		// let r = Math.floor(Math.random() * 10);
+		let r = 6;
+		batteryStr += '|'.repeat(r);
+		cameraBattery += r;
 		haveBattery = true;
-		console.log(node.x, node.z)
-		// console.log(gameMap.graph.getNode(node.x, node.z))
-		// gameMap.highlight(node, 0xffffff)
-		// let manhatten = gameMap.manhattanDistance(node, new THREE.Vector3(13, 0, 13))
-		// console.log(manhatten)
-		gameMap.arrow(new THREE.Vector3(node.x, 0, node.z), new THREE.Vector3(13 - node.x, 0, 13 - node.z))
-		// gameMap.backtrack()
+		let dir = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(13, 13))
+		gameMap.arrow(new THREE.Vector3(node.x, 0, node.z), new THREE.Vector3(dir[1].x - node.x, 0, dir[1].z - node.z))
 	}
 
+	let danger;
 	if (fpCamera.flashlight && haveBattery) {
+		danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
 		timer.update();
-		timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
 	} else {
 		timer.reset()
 	}
-	const delta = timer.getDelta()
-	// scary.update(deltaTime, gameMap);
+	// console.log(gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length)
+	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
+
+	timerGUI.innerHTML += '<p>Danger Detector</p>'
+	// const delta = timer.getDelta()
+	scary.update(deltaTime, gameMap);
 }
 
 setup();

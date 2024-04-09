@@ -25,7 +25,6 @@ export class Player extends Character {
 
 	update(deltaTime, gameMap, controller, camera) {
 		this.state.updateState(this, controller, camera, gameMap);
-		// console.log(gameMap.quantize(this.location).type == TileNode.Type.Ground)
 		super.update(deltaTime, gameMap);
 	}
 

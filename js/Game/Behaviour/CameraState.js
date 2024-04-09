@@ -25,7 +25,7 @@ export class IdleState extends State {
 	enterState(player) {
 		player.velocity.x = 0;
 		player.velocity.z = 0;
-		console.log("idling");
+		// console.log("idling");
 	}
 
 	updateState(player) {
@@ -33,7 +33,7 @@ export class IdleState extends State {
 			player.switchState(new MovingState());
 		}
 
-		if (player.camera.position.distanceTo(player.scary.object.position) < 4) {
+		if (player.camera.position.distanceTo(player.scary.object.position) < 2) {
 			player.switchState(new GameOver());
 		}
 	}
@@ -46,7 +46,7 @@ export class MovingState extends State {
 		if (!player.moving()) {
 			player.switchState(new IdleState());
 		} else {
-			console.log("moving");
+			// console.log("moving");
 		}
 		if (player.camera.position.distanceTo(player.scary.object.position) < 4) {
 			player.switchState(new GameOver());

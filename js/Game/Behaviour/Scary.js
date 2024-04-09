@@ -81,7 +81,7 @@ export class Scary {
 		const loader = new FBXLoader();
 		loader.setPath("js/Resources/Scary Zombie Pack/");
 		loader.load("Ch30_nonPBR.fbx", (fbx) => {
-			fbx.scale.setScalar(0.05);
+			fbx.scale.setScalar(0.025);
 			fbx.traverse((c) => {
 				c.castShadow = true;
 			});
@@ -142,7 +142,6 @@ export class Scary {
 	followPlayer(gameMap, player) {
 		// let playerNode = gameMap.quantize(player.location);
 		let playerNode = gameMap.quantize(player.position);
-
 		let npcNode = gameMap.quantize(this.object.position);
 
 		if (npcNode == playerNode) {
