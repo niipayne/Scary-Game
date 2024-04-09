@@ -22,7 +22,7 @@ export class TileNode {
 
 	// Try to add an edge to this node
 	tryAddEdge(node, cost) {
-		if (node.type === TileNode.Type.Ground) {
+		if (node.type === TileNode.Type.Ground || node.type === TileNode.Type.End) {
 			this.edges.push({node: node, cost: cost});
 		}
 	}

@@ -57,11 +57,9 @@ export class MovingState extends State {
 		if (!controller.moving()) {
 			player.switchState(new IdleState());
 		} else {
-			// let force = controller.direction();
-			// force.setLength(50);
-			// player.applyForce(force);
-			// player
-		
+			if (player.location.x >= 30 && player.location.z >= 30) {
+				console.log('Winner')
+			}
 		}	
 	}
   

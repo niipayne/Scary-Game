@@ -74,38 +74,13 @@ export class MapRenderer {
 		]);
 
 		this.buildWalls(node, x, y, z);
-		// let x = i * this.tileSize + this.start.x;
-		// let y = 0;
-		// let z = j * this.tileSize + this.start.z;
 
-		// let height = this.tileSize;
-		// if (type === TileNode.Type.Obstacle) {
-		// 	height = height * 2;
-		// }
-
-		// let geometry = new THREE.BoxGeometry(this.tileSize, height, this.tileSize);
-		// geometry.translate(
-		// 	x + 0.5 * this.tileSize,
-		// 	y + 0.5 * height,
-		// 	z + 0.5 * this.tileSize
-		// );
-
-		// if (type === TileNode.Type.Obstacle) {
-		// 	this.obstacleGeometries = BufferGeometryUtils.mergeGeometries([
-		// 		this.obstacleGeometries,
-		// 		geometry,
-		// 	]);
-		// } else if (type === TileNode.Type.Ground) {
-		// 	this.groundGeometries = BufferGeometryUtils.mergeGeometries([
-		// 		this.groundGeometries,
-		// 		geometry,
-		// 	]);
-		// } else if (type === TileNode.Type.End) {
-		// 	this.endGeometries = BufferGeometryUtils.mergeGeometries([
-		// 		this.endGeometries,
-		// 		geometry,
-		// 	]);
-		// }
+		if (type === TileNode.Type.End) {
+			this.endGeometries = BufferGeometryUtils.mergeGeometries([
+				this.endGeometries,
+				geometry,
+			]);
+		}
 	}
 
 	buildWalls(node, cx, cy, cz) {

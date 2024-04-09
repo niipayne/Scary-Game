@@ -10,6 +10,7 @@ import { FirstPersonCamera } from "./Game/World/firstPersonView.js";
 import Stats from "three/examples/jsm/libs/stats.module";
 
 import { Scary } from "./Game/Behaviour/Scary.js";
+import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
 
 // Create Scene
 const scene = new THREE.Scene();
@@ -23,19 +24,10 @@ const renderer = new THREE.WebGLRenderer();
 
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 // orbitControls.addEventListener('change', renderer);
-// Create GameMap
 const gameMap = new GameMap();
-
-// Create clock
 const clock = new THREE.Clock();
-
-// Controller for player
 const controller = new Controller(document);
-
-// Create player
 const player = new Player(new THREE.Color(0xff0000));
-
-// Create NPC
 let npc = new NPC(new THREE.Color(0x000000));
 
 // let scary = new Scary(scene);

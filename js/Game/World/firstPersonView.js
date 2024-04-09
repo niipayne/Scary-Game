@@ -96,6 +96,7 @@ export class FirstPersonCamera {
 		} else {
 			this.flashlight = true;
 			this.spotLight.intensity = 1;
+			console.log(this.spotLight);
 		}
 	}
 

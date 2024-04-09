@@ -30,15 +30,16 @@ export class Graph {
 				let type = TileNode.Type.Ground;
 				let node = new TileNode(this.nodes.length, i, j, type);
 
+				if (i == 13 && j == 13) {
+					continue
+				}
 
 				this.nodes.push(node);
 			}
 		} 
 
-		this.nodes.pop();
 		let type = TileNode.Type.End;
 		let node = new TileNode(this.nodes.length, 13, 13, type);
-
 
 		this.nodes.push(node);
 
@@ -54,7 +55,7 @@ export class Graph {
 				let index = j * this.cols + i;
 				let current = this.nodes[index];
 
-				if (current.type == TileNode.Type.Ground) {
+				if (current.type == TileNode.Type.Ground || current.type == TileNode.Type.End) {
 
 					if (i > 0) {
 						// CREATE A WEST EDGE
