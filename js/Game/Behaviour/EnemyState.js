@@ -55,3 +55,20 @@ export class SprintState extends State {
 		}
 	}
 }
+
+export class FleeingState extends State {
+	enterState(enemy) {
+		console.log("HEHEHHEHEHEHE");
+	}
+
+	updateState(enemy) {
+		enemy.topSpeed = 25;
+		enemy.applyForce(enemy.followPlayer(enemy.gameMap, enemy.camera));
+
+		if (
+			Math.floor(enemy.object.position.distanceTo(enemy.camera.position)) > 15
+		) {
+			enemy.switchState(new ApproachingState());
+		}
+	}
+}

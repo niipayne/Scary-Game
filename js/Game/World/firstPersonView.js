@@ -15,14 +15,17 @@ export class FirstPersonCamera {
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
 
+		this.raycaster = new THREE.Raycaster();
+
 		this.moveForward = false;
 		this.moveBackward = false;
 		this.moveLeft = false;
 		this.moveRight = false;
 		this.canJump = false;
 		this.setup(this.controls);
-		this.flashlight = true;
+		this.flashlight = false;
 		this.size = 1.5;
+		this.haveBatterys;
 	}
 
 	setup(controls) {
@@ -35,6 +38,9 @@ export class FirstPersonCamera {
 		this.camera.add(this.spotLight.target);
 		this.spotLight.position.set(0, 0, 1);
 		this.spotLight.target = this.camera;
+
+		this.raycaster.setFromCamera(new THREE.Vector2(this.camera.quaternion.x, this.camera.quaternion.z), this.camera)
+		const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
 
 		instructions.addEventListener("click", function () {
 			controls.lock();
@@ -53,6 +59,7 @@ export class FirstPersonCamera {
 		document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
 		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
+		document.addEventListener("mouseup", (e) => this.flashOff(e), false);
 	}
 
 	// check edges
@@ -98,14 +105,18 @@ export class FirstPersonCamera {
 	}
 
 	flashOn(event) {
-		if (this.flashlight) {
-			this.flashlight = false;
-			this.spotLight.intensity = 0;
-		} else {
+		if (this.haveBatterys) {
 			this.flashlight = true;
 			this.spotLight.intensity = 1;
-			console.log(this.spotLight);
+			// console.log(this.spotLight);
+			const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
+			console.log(intersecs[0])
 		}
+	}
+
+	flashOff(event) {
+		this.flashlight = false;
+		this.spotLight.intensity = 0;
 	}
 
 	onKeyDown(event) {
@@ -186,9 +197,16 @@ export class FirstPersonCamera {
 		return false;
 	}
 
-	update(deltaTime) {
+	update(deltaTime, haveBattery, camera) {
 		this.checkEdges(this.gameMap);
 		this.moveMent(deltaTime);
+		this.camera = camera;
+		this.haveBatterys = haveBattery;
+		if (!haveBattery) {
+			this.flashOff()  
+		} else {
+			
+		}
 	}
 
 	getObject(scene) {

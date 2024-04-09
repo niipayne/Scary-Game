@@ -68,11 +68,11 @@ export class GameMap {
 
 	// Debug method
 	highlight(node, color) {
-		let geometry = new THREE.BoxGeometry(5, 1, 5);
+		let geometry = new THREE.BoxGeometry(5, 0, 5);
 		let material = new THREE.MeshBasicMaterial({ color: color });
 		let vec = this.localize(node);
 
-		geometry.translate(vec.x, vec.y + 0.5, vec.z);
+		geometry.translate(vec.x, vec.y, vec.z);
 		this.scene.add(new THREE.Mesh(geometry, material));
 	}
 
@@ -84,7 +84,7 @@ export class GameMap {
 		let origin = this.localize(node);
 		origin.y += 1.5;
 		let length = this.tileSize;
-		let hex = 0x000000;
+		let hex = 0xffffff;
 
 		let arrowHelper = new THREE.ArrowHelper(vector, origin, length, hex);
 		this.scene.add(arrowHelper);

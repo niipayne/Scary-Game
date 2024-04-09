@@ -2,7 +2,7 @@ import { FirstPersonCamera } from "../World/firstPersonView";
 import { State } from "./State";
 
 export class CameraState extends FirstPersonCamera {
-	constructor(camera, domElement, scene, gameMap, scary) {
+	constructor(camera, domElement, scene, gameMap, scary, haveBattery) {
 		super(camera, domElement, scene, gameMap, scary);
 
 		this.state = new IdleState();
@@ -15,9 +15,9 @@ export class CameraState extends FirstPersonCamera {
 		this.state.enterState(this);
 	}
 
-	update(deltaTime) {
+	update(deltaTime, scene, haveBattery, camera) {
 		this.state.updateState(this);
-		super.update(deltaTime);
+		super.update(deltaTime, haveBattery, camera);
 	}
 }
 

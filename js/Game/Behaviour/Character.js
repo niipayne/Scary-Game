@@ -46,7 +46,6 @@ export class Character {
 		// update velocity via acceleration
 		this.velocity.addScaledVector(this.acceleration, deltaTime);
 		
-		
 
 		if (this.velocity.length() > 0) {
 

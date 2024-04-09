@@ -2,7 +2,7 @@ export class TileNode {
 
 	static Type = Object.freeze({
 		Ground: Symbol("ground"),
-		Obstacle: Symbol("obstacle"),
+		Battery: Symbol("battery"),
 		End: Symbol('end')
 	})
 
@@ -22,7 +22,7 @@ export class TileNode {
 
 	// Try to add an edge to this node
 	tryAddEdge(node, cost) {
-		if (node.type === TileNode.Type.Ground || node.type === TileNode.Type.End) {
+		if (node.type === TileNode.Type.Ground || node.type === TileNode.Type.End || node.type === TileNode.Type.Battery) {
 			this.edges.push({node: node, cost: cost});
 		}
 	}

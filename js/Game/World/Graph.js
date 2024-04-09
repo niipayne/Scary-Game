@@ -1,6 +1,7 @@
 import { TileNode } from './TileNode.js';
 import * as THREE from 'three';
 
+
 export class Graph {
 	
 	// Constructor for our Graph class
@@ -27,7 +28,14 @@ export class Graph {
 		for (let j = 0; j < this.rows; j++) {
 			for (let i = 0; i < this.cols; i++) {
 
-				let type = TileNode.Type.Ground;
+				let b = Math.random();
+				let type;
+
+				if (b <= 0.05) {
+					type = TileNode.Type.Battery;
+				} else {
+					type = TileNode.Type.Ground;
+				}
 				let node = new TileNode(this.nodes.length, i, j, type);
 
 				if (i == 13 && j == 13) {
@@ -55,8 +63,7 @@ export class Graph {
 				let index = j * this.cols + i;
 				let current = this.nodes[index];
 
-				if (current.type == TileNode.Type.Ground || current.type == TileNode.Type.End) {
-
+				if (current.type == TileNode.Type.Ground || current.type == TileNode.Type.End || current.type == TileNode.Type.Battery) {
 					if (i > 0) {
 						// CREATE A WEST EDGE
 						let west = this.nodes[index - 1];

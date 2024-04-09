@@ -10,7 +10,7 @@ export class MapRenderer {
 
 		this.wallGeometries = new THREE.BoxGeometry(0, 0, 0);
 		this.groundGeometries = new THREE.BoxGeometry(0, 0, 0);
-		this.obstacleGeometries = new THREE.BoxGeometry(0, 0, 0);
+		this.batteryGeometries = new THREE.BoxGeometry(0, 0, 0);
 		this.endGeometries = new THREE.BoxGeometry(0, 0, 0);
 	}
 
@@ -28,18 +28,18 @@ export class MapRenderer {
 		}
 
 		let groundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-		let obstacleMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
+		let batteryMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
 		let wallMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
 		let endMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
 
 		let gameObject = new THREE.Group();
 		let ground = new THREE.Mesh(this.groundGeometries, groundMaterial);
-		let obstacles = new THREE.Mesh(this.obstacleGeometries, obstacleMaterial);
+		let battery = new THREE.Mesh(this.batteryGeometries, batteryMaterial);
 		let walls = new THREE.Mesh(this.wallGeometries, wallMaterial);
 		let end = new THREE.Mesh(this.endGeometries, endMaterial);
 
 		gameObject.add(ground);
-		gameObject.add(obstacles);
+		gameObject.add(battery);
 		gameObject.add(walls);
 		gameObject.add(end);
 
@@ -75,9 +75,17 @@ export class MapRenderer {
 
 		this.buildWalls(node, x, y, z);
 
+
+
 		if (type === TileNode.Type.End) {
 			this.endGeometries = BufferGeometryUtils.mergeGeometries([
 				this.endGeometries,
+				geometry,
+			]);
+		}
+		if (type === TileNode.Type.Battery) {
+			this.batteryGeometries = BufferGeometryUtils.mergeGeometries([
+				this.batteryGeometries,
 				geometry,
 			]);
 		}

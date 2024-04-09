@@ -2,6 +2,7 @@ import { ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 import { Character } from './Character.js';
 import { State } from './State';
 import * as THREE from 'three';
+import { TileNode } from '../World/TileNode.js';
 
 
 export class Player extends Character {
@@ -23,7 +24,8 @@ export class Player extends Character {
 	}
 
 	update(deltaTime, gameMap, controller, camera) {
-		this.state.updateState(this, controller, camera);
+		this.state.updateState(this, controller, camera, gameMap);
+		// console.log(gameMap.quantize(this.location).type == TileNode.Type.Ground)
 		super.update(deltaTime, gameMap);
 	}
 
@@ -52,12 +54,13 @@ export class MovingState extends State {
 	enterState(player) {
 	}
 
-	updateState(player, controller, camera) {
+	updateState(player, controller, camera, gameMap) {
 		player.location = camera.position.clone()
 		if (!controller.moving()) {
 			player.switchState(new IdleState());
 		} else {
-			if (player.location.x >= 30 && player.location.z >= 30) {
+			let node = gameMap.quantize(player.location)
+			if (gameMap.graph.getNode(node.x, node.z).type == TileNode.Type.End) {
 				console.log('Winner')
 			}
 		}	
