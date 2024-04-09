@@ -1,11 +1,15 @@
+import { ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 import { Character } from './Character.js';
 import { State } from './State';
+import * as THREE from 'three';
+
 
 export class Player extends Character {
 
 	constructor(colour) {
 		super(colour);
 		this.frictionMagnitude = 20;
+		// let coneMat = new THREE.
 
 		// State
 		this.state = new IdleState();
@@ -18,8 +22,8 @@ export class Player extends Character {
 		this.state.enterState(this);
 	}
 
-	update(deltaTime, gameMap, controller) {
-		this.state.updateState(this, controller);
+	update(deltaTime, gameMap, controller, camera) {
+		this.state.updateState(this, controller, camera);
 		super.update(deltaTime, gameMap);
 	}
 
@@ -48,14 +52,15 @@ export class MovingState extends State {
 	enterState(player) {
 	}
 
-	updateState(player, controller) {
-
+	updateState(player, controller, camera) {
+		player.location = camera.position.clone()
 		if (!controller.moving()) {
 			player.switchState(new IdleState());
 		} else {
-			let force = controller.direction();
-			force.setLength(50);
-			player.applyForce(force);
+			// let force = controller.direction();
+			// force.setLength(50);
+			// player.applyForce(force);
+			// player
 		
 		}	
 	}

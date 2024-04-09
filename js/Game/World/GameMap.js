@@ -13,9 +13,9 @@ export class GameMap {
 
 		// this.width = 50;
 		// this.depth = 50;
-		this.start = new THREE.Vector3(-50,0,-35);
+		this.start = new THREE.Vector3(-35,0,-35);
 
-		this.width = 100;
+		this.width = 70;
 		this.depth = 70;
 
 		// We also need to define a tile size

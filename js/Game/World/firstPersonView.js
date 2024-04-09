@@ -117,13 +117,10 @@ export class FirstPersonCamera {
 				break;
 
 			case "ArrowRight":
-			case "KeyD":
 				this.moveRight = true;
 				break;
-
-			case "Space":
-				if (this.canJump === true) this.velocity.y += 350;
-				this.canJump = false;
+			case "KeyD":
+				this.moveRight = true;
 				break;
 		}
 	}
