@@ -3,12 +3,14 @@ import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { VectorUtil } from "../../Util/VectorUtil.js";
 
 export class Scary {
-	constructor(scene) {
+	constructor(scene, gameMap, camera) {
 		this.mixer = [];
-		this.load(scene);
+		this.load(scene, gameMap);
 		this.object;
+		this.gameMap = gameMap;
+		this.camera = camera;
 
-		this.location = new THREE.Vector3(0, 0, 0);
+		this.location = new THREE.Vector3();
 		this.velocity = new THREE.Vector3(0, 0, 0);
 		this.acceleration = new THREE.Vector3(0, 0, 0);
 
@@ -94,6 +96,8 @@ export class Scary {
 			});
 			scene.add(fbx);
 			this.object = fbx;
+
+			this.object.position.set(20, 5, 20);
 			return this.object;
 		});
 	}
@@ -138,6 +142,7 @@ export class Scary {
 	followPlayer(gameMap, player) {
 		// let playerNode = gameMap.quantize(player.location);
 		let playerNode = gameMap.quantize(player.position);
+
 		let npcNode = gameMap.quantize(this.object.position);
 
 		if (npcNode == playerNode) {
@@ -149,9 +154,7 @@ export class Scary {
 		return this.simpleFollow(gameMap);
 	}
 
-	update(deltaTime, gameMap) {
-		this.checkEdges(gameMap);
-		this.mixer.map((m) => m.update(deltaTime));
+	movement(deltaTime) {
 		this.velocity.addScaledVector(this.acceleration, deltaTime);
 
 		if (this.velocity.length() > 0) {
@@ -166,5 +169,14 @@ export class Scary {
 			this.object.position.addScaledVector(this.velocity, deltaTime);
 		}
 		this.acceleration.multiplyScalar(0);
+		if (this.object.position.y != 5) {
+			this.object.position.y = 5;
+		}
+	}
+
+	update(deltaTime, gameMap) {
+		this.mixer.map((m) => m.update(deltaTime));
+		this.movement(deltaTime);
+		this.checkEdges(gameMap);
 	}
 }
