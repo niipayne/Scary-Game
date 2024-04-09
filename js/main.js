@@ -1,14 +1,14 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { GameMap } from "./Game/World/GameMap.js";
-import { Character } from "./Game/Behaviour/Character.js";
 import { NPC } from "./Game/Behaviour/NPC.js";
 import { Player } from "./Game/Behaviour/Player.js";
 import { Controller } from "./Game/Behaviour/Controller.js";
 import { TileNode } from "./Game/World/TileNode.js";
 import { FirstPersonCamera } from "./Game/World/firstPersonView.js";
 import Stats from "three/examples/jsm/libs/stats.module";
+import { CameraState } from "./Game/Behaviour/CameraState.js";
 
+import { EnemyState } from "./Game/Behaviour/EnemyState.js";
 import { Scary } from "./Game/Behaviour/Scary.js";
 import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
 
@@ -22,21 +22,21 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-const orbitControls = new OrbitControls(camera, renderer.domElement);
-// orbitControls.addEventListener('change', renderer);
+// Create GameMap
 const gameMap = new GameMap();
 const clock = new THREE.Clock();
 const controller = new Controller(document);
 const player = new Player(new THREE.Color(0xff0000));
 let npc = new NPC(new THREE.Color(0x000000));
 
-// let scary = new Scary(scene);
+let scary = new EnemyState(scene, gameMap, camera);
 
-let fpCamera = new FirstPersonCamera(
+let fpCamera = new CameraState(
 	camera,
 	renderer.domElement,
 	scene,
-	gameMap
+	gameMap,
+	scary
 );
 
 const stats = new Stats();
@@ -78,6 +78,7 @@ function setup() {
 
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);
+	npc.location = gameMap.localize(startPlayer);
 
 	npc.path = gameMap.astar(startNPC, startPlayer);
 

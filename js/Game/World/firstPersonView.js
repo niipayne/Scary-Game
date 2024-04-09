@@ -2,8 +2,10 @@ import { PointerLockControls } from "three/addons/controls/PointerLockControls.j
 import * as THREE from "three";
 
 export class FirstPersonCamera {
-	constructor(camera, domElement, scene, gameMap) {
+	constructor(camera, domElement, scene, gameMap, scary) {
 		this.camera = camera;
+		this.scary = scary;
+
 		this.camera.position.y = 7;
 		this.domElement = domElement;
 		this.velocity = new THREE.Vector3();
@@ -26,6 +28,8 @@ export class FirstPersonCamera {
 	setup(controls) {
 		const blocker = document.getElementById("blocker");
 		const instructions = document.getElementById("instructions");
+		const gameOver = document.getElementById("gameOver");
+		const displaye = document.getElementById("displaye");
 
 		this.camera.add(this.spotLight);
 		this.camera.add(this.spotLight.target);
@@ -42,8 +46,8 @@ export class FirstPersonCamera {
 		});
 
 		controls.addEventListener("unlock", function () {
-			blocker.style.display = "block";
-			instructions.style.display = "";
+			gameOver.style.display = "block";
+			displaye.style.display = "block";
 		});
 
 		document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
@@ -79,7 +83,7 @@ export class FirstPersonCamera {
 				location.z = nodeEdge + this.size / 2;
 			}
 		}
-		
+
 		if (!node.hasEdgeTo(node.x, node.z + 1)) {
 			let nodeEdge = nodeLocation.z + gameMap.tileSize / 2;
 			let characterEdge = location.z + this.size / 2;
@@ -87,6 +91,10 @@ export class FirstPersonCamera {
 				location.z = nodeEdge - this.size / 2;
 			}
 		}
+	}
+
+	caught() {
+		this.controls.unlock();
 	}
 
 	flashOn(event) {
@@ -150,11 +158,9 @@ export class FirstPersonCamera {
 		}
 	}
 
-	update(deltaTime, scene) {
-		this.checkEdges(this.gameMap);
-
-		this.velocity.x -= this.velocity.x * 25.0 * deltaTime;
-		this.velocity.z -= this.velocity.z * 25.0 * deltaTime;
+	moveMent(deltaTime) {
+		this.velocity.x -= this.velocity.x * 40.0 * deltaTime;
+		this.velocity.z -= this.velocity.z * 40.0 * deltaTime;
 
 		this.direction.z = Number(this.moveForward) - Number(this.moveBackward);
 		this.direction.x = Number(this.moveRight) - Number(this.moveLeft);
@@ -167,8 +173,22 @@ export class FirstPersonCamera {
 
 		this.controls.moveRight(-this.velocity.x * deltaTime);
 		this.controls.moveForward(-this.velocity.z * deltaTime);
+	}
 
-		this.controls.getObject(scene).position.y += this.velocity.y * deltaTime;
+	moving() {
+		if (
+			this.moveLeft ||
+			this.moveRight ||
+			this.moveForward ||
+			this.moveBackward
+		)
+			return true;
+		return false;
+	}
+
+	update(deltaTime) {
+		this.checkEdges(this.gameMap);
+		this.moveMent(deltaTime);
 	}
 
 	getObject(scene) {

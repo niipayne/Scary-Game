@@ -30,6 +30,30 @@
 			cursor: pointer;
 			color: white;
 		}
+
+		#gameOver {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: none;
+		}
+
+		#displaye {
+			width: 100%;
+			height: 100%;
+
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			text-align: center;
+			font-size: 100px;
+			cursor: pointer;
+			color: red;
+			display: none;
+		}
 	</style>
 </head>
 
@@ -45,6 +69,13 @@
 				Jump: SPACE<br />
 				Look: MOUSE<br />
 				Flashlight: CLICK
+			</p>
+		</div>
+	</div>
+	<div id="gameOver">
+		<div id="displaye">
+			<p>
+				GAME OVER
 			</p>
 		</div>
 	</div>
