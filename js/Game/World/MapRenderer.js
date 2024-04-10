@@ -15,14 +15,6 @@ export class MapRenderer {
 	}
 
 	createRendering(graph) {
-		// Iterate over all of the
-		// indices in our graph
-		// for (let index in graph) {
-		// 	let i = index % this.cols;
-		// 	let j = Math.floor(index / this.cols);
-
-		// 	this.createTile(i, j, graph[index].type);
-		// }
 		for (let n of graph) {
 			this.createTile(n);
 		}
@@ -73,7 +65,7 @@ export class MapRenderer {
 			geometry,
 		]);
 
-		// this.buildWalls(node, x, y, z);
+		this.buildWalls(node, x, y, z);
 
 
 

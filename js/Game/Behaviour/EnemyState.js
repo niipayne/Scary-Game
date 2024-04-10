@@ -35,8 +35,6 @@ export class ApproachingState extends State {
 		if (enemy.seen === true) {
 			enemy.switchState(new SeenState(), gameMap);
 		} else {
-			// console.log(new THREE.Vector3(13, 7, 13))
-			console.log(enemy.camera.position)
 			enemy.applyForce(enemy.followPlayer(enemy.gameMap, enemy.camera));
 			if (
 				Math.floor(enemy.object.position.distanceTo(enemy.camera.position)) < 15
@@ -69,7 +67,8 @@ export class SprintState extends State {
 
 export class SeenState extends State {
 	enterState(enemy) {
-		enemy.topSpeed = 1.50;
+		// enemy.topSpeed = 1.50;
+		enemy.topSpeed = 0;
 		// let enemyNode = gameMap.quantize(enemy.location)
 		// console.log(enemyNode)
 		// let node = gameMap.graph.getRandomEmptyTile();
@@ -79,7 +78,7 @@ export class SeenState extends State {
 		// let force = enemy.pathFollow(dir, 2, gameMap);
 		// enemy.applyForce(force);
 		// this.runAway = gameMap.graph.getRandomEmptyTile();
-		this.runAwayNode = new THREE.Vector3(32, 7, -32);
+		// this.runAwayNode = new THREE.Vector3(32, 7, -32);
 		// console.log(force)
 	}
 
@@ -91,7 +90,7 @@ export class SeenState extends State {
 		// 	enemy.switchState(new SeenState(), gameMap);
 		// } else {
 		// }
-		enemy.applyForce(enemy.followAway(enemy.gameMap, this.runAwayNode));
+		// enemy.applyForce(enemy.followAway(enemy.gameMap, this.runAwayNode));
 		// if (
 		// 	Math.floor(enemy.object.position.distanceTo(this.runAwayNode)) < 5
 		// ) {
@@ -113,8 +112,8 @@ export class SeenState extends State {
 		// HERE HERE HERE BELOWWWWWWWWWWW
 
 		// uncomment this and change line enemy.topSpeed = 0 in this function to return regular functionality
-		// if (enemy.seen === false) {
-		// 	enemy.switchState(new ApproachingState());
-		// }
+		if (enemy.seen === false) {
+			enemy.switchState(new ApproachingState());
+		}
 	}
 }

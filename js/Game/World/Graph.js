@@ -68,15 +68,12 @@ export class Graph {
 						// CREATE A WEST EDGE
 						let west = this.nodes[index - 1];
 						current.tryAddEdge(west, this.tileSize);
-
-			
 					}
 
 					if (i < this.cols - 1) {
 						// CREATE AN EAST EDGE
 						let east = this.nodes[index + 1];
 						current.tryAddEdge(east, this.tileSize);
-
 					}
 
 					if (j > 0) {
@@ -91,7 +88,6 @@ export class Graph {
 						current.tryAddEdge(south, this.tileSize);
 					}
 				}
-
 			}
 		}
 

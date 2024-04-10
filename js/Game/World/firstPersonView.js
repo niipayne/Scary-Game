@@ -63,18 +63,12 @@ export class FirstPersonCamera {
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
 		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
 		document.addEventListener("mouseup", (e) => this.flashOff(e), false);
-		// document.addEventListener("mousedown", (e) => this.casting(e), false);
 	}
 
 	casting() {
-		// console.log(event.button)
-		// switch (event.button) {
-		// 	case 0:
-		// 		console.log('click')
-		// }
 		this.camera.getWorldDirection(this.target);
 		this.ray.set(this.camera.position, this.target.normalize());
-		console.log('here boi')
+		// console.log('here boi')
 		this.intersects = this.ray.intersectObjects(this.scary.s, false);
 		if (this.intersects.length > 0) {
 			console.log('seen')

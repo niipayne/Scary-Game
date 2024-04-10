@@ -142,13 +142,11 @@ export class Scary {
 	}
 
 	followAway(gameMap, location) {
-		// let playerNode = gameMap.quantize(player.location);
-		// console.log(location)
 		let playerNode = gameMap.quantize(location);
-		console.log(playerNode, 'follow away player node')
+		// console.log(playerNode, 'follow away player node')
 
 		let npcNode = gameMap.quantize(this.object.position);
-		console.log(npcNode, 'follow away npc')
+		// console.log(npcNode, 'follow away npc')
 
 		if (npcNode == playerNode) {
 			return this.arrive(location, gameMap.tileSize / 2);
@@ -180,13 +178,11 @@ export class Scary {
 	}
 
 	followPlayer(gameMap, player) {
-		// let playerNode = gameMap.quantize(player.location);
-		// console.log(player.position)
 		let playerNode = gameMap.quantize(player.position);
-		console.log(playerNode, 'player node')
+		// console.log(playerNode, 'player node')
 
 		let npcNode = gameMap.quantize(this.object.position);
-		console.log(npcNode, 'npc')
+		// console.log(npcNode, 'npc')
 		if (npcNode == playerNode) {
 			return this.arrive(player.position, gameMap.tileSize / 2);
 		} else if (playerNode != this.path[this.path.length - 1]) {

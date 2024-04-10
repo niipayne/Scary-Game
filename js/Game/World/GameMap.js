@@ -9,10 +9,6 @@ import { VectorUtil } from "../../Util/VectorUtil";
 export class GameMap {
 	// Constructor for our GameMap class
 	constructor() {
-		// this.start = new THREE.Vector3(-25, 0, -25);
-
-		// this.width = 50;
-		// this.depth = 50;
 		this.start = new THREE.Vector3(-35,0,-35);
 
 		this.width = 70;
@@ -45,6 +41,7 @@ export class GameMap {
 
 		// let mazeGenerator = new MazeGenerator(this.graph);
 		// mazeGenerator.generate();
+		
 		// Set the game object to our rendering
 		this.gameObject = this.mapRenderer.createRendering(this.graph.nodes);
 	}
