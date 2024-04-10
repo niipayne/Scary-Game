@@ -34,12 +34,12 @@ export class FirstPersonCamera {
 		this.setup(this.controls);
 	}
 
+	// Setting up the event listeners for the keyboard and mouse input
 	setup(controls) {
 		const blocker = document.getElementById("blocker");
 		const instructions = document.getElementById("instructions");
 
-		const penScare = document.getElementById("penguin_jumpscare");
-
+		// Adding the spotlight to the camera to act as the flashlight
 		this.camera.add(this.spotLight);
 		this.camera.add(this.spotLight.target);
 		this.spotLight.position.set(0, 0, 1);
@@ -64,6 +64,7 @@ export class FirstPersonCamera {
 		document.addEventListener("mouseup", (e) => this.flashOff(e), false);
 	}
 
+	// Raycasting that the Maynard collids with for collision detection
 	casting() {
 		this.camera.getWorldDirection(this.target);
 		this.ray.set(this.camera.position, this.target.normalize());
@@ -76,7 +77,7 @@ export class FirstPersonCamera {
 		}
 	}
 
-	// check edges
+	// Check edges of the map for collision detection
 	checkEdges(gameMap) {
 		let location = this.camera.position;
 		let node = gameMap.quantize(location);
@@ -114,6 +115,7 @@ export class FirstPersonCamera {
 		}
 	}
 
+	// Method called when the player is caught
 	caught() {
 		const gameOver = document.getElementById("gameOver");
 		const displaye = document.getElementById("displaye");
@@ -135,6 +137,7 @@ export class FirstPersonCamera {
 		this.controls.unlock();
 	}
 
+	// Method called when the player has won
 	win() {
 		const win = document.getElementById("winner");
 		const winDiv = document.getElementById("winnerDiv");
@@ -145,6 +148,7 @@ export class FirstPersonCamera {
 		this.controls.unlock();
 	}
 
+	// Method called when the left click is held
 	flashOn(event) {
 		if (this.haveBatterys) {
 			this.flashlight = true;
@@ -152,12 +156,14 @@ export class FirstPersonCamera {
 		}
 	}
 
+	// Method called when the left click is not being held
 	flashOff(event) {
 		this.flashlight = false;
 		this.scary.seen = false;
 		this.spotLight.intensity = 0;
 	}
 
+	// Method for the keyboard inputs for movement
 	onKeyDown(event) {
 		switch (event.code) {
 			case "ArrowUp":
@@ -208,6 +214,7 @@ export class FirstPersonCamera {
 		}
 	}
 
+	// Updates the position of the player based on the keyboard inputs
 	moveMent(deltaTime) {
 		this.velocity.x -= this.velocity.x * 70.0 * deltaTime;
 		this.velocity.z -= this.velocity.z * 70.0 * deltaTime;
@@ -236,6 +243,7 @@ export class FirstPersonCamera {
 		return false;
 	}
 
+	// Update function for the player that is called
 	update(deltaTime, haveBattery, camera) {
 		this.checkEdges(this.gameMap);
 		this.moveMent(deltaTime);

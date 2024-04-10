@@ -1,18 +1,12 @@
 import * as THREE from "three";
 import { GameMap } from "./Game/World/GameMap.js";
-// import { NPC } from "./Game/Behaviour/NPC.js";
 import { Player } from "./Game/Behaviour/Player.js";
 import { Controller } from "./Game/Behaviour/Controller.js";
 import { TileNode } from "./Game/World/TileNode.js";
-import { FirstPersonCamera } from "./Game/World/firstPersonView.js";
 import Stats from "three/examples/jsm/libs/stats.module";
 import { CameraState } from "./Game/Behaviour/CameraState.js";
-
 import { EnemyState } from "./Game/Behaviour/EnemyState.js";
-import { Scary } from "./Game/Behaviour/Scary.js";
 import { Timer } from "three/addons/misc/Timer.js";
-import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
-import { VectorUtil } from "./Util/VectorUtil.js";
 
 // Create Scene
 const scene = new THREE.Scene();
@@ -25,6 +19,7 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 const textureLoader = new THREE.TextureLoader();
 
+// Battery Variables
 let cameraBattery = 15;
 let haveBattery = true;
 let batteryStr = "|||||||||||||||";
@@ -38,12 +33,14 @@ const clock = new THREE.Clock();
 const controller = new Controller(document);
 const player = new Player(new THREE.Color(0xff0000));
 
+// Initialising the Maynard
 let scary = new EnemyState(scene, gameMap, camera);
 scary.name = "spooky_scary";
 
 const timer = new Timer();
 const timerGUI = document.getElementById("flashlight_battery");
 
+// Initialising the player first person camaera
 let fpCamera = new CameraState(
 	camera,
 	renderer.domElement,
@@ -83,12 +80,6 @@ function setup() {
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);
 
-	// const axesHelper = new THREE.AxesHelper(100);
-	// scene.add(axesHelper);
-
-	// const gridHelper = new THREE.GridHelper(100, 100);
-	// scene.add(gridHelper);
-
 	window.addEventListener("resize", onWindowResize, false);
 
 	camera.position.x = -32;
@@ -120,6 +111,7 @@ function animate() {
 	let follow = scary.followPlayer(gameMap, camera);
 	scary.applyForce(follow);
 
+	// When you run out of battery life the flashlight dies
 	if (cameraBattery < timer.getElapsed()) {
 		haveBattery = false;
 	}
@@ -139,28 +131,36 @@ function animate() {
 			gameMap.graph.getNode(node.x, node.z),
 			gameMap.graph.getNode(13, 13)
 		);
+		// Drawing the arrow on the scene
 		gameMap.arrow(
 			new THREE.Vector3(node.x, 0, node.z),
 			new THREE.Vector3(dir[1].x - node.x, 0, dir[1].z - node.z)
 		);
 	}
-
+	// Updating the battery when you get it
 	if (fpCamera.flashlight && haveBattery) {
 		timer.update();
 	} else {
 		timer.reset();
 	}
 
+	// To measure the distance that the Maynard is and display it on screen
 	let danger;
-	danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
-	danger = Math.floor((danger) / 25)
-	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
-	
+	danger = gameMap.astar(
+		gameMap.graph.getNode(node.x, node.z),
+		gameMap.graph.getNode(scary_node.x, scary_node.z)
+	).length;
+	danger = Math.floor(danger / 25);
+	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(
+		Math.floor(timer.getElapsed()),
+		cameraBattery
+	)}</h2>`;
+
 	if (danger == 0) {
 		timerGUI.innerHTML += `<h2>NOT SAFE!!!!</h2>`;
 	} else {
-		dangerStr = '[###]'.repeat(danger);
-		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`
+		dangerStr = "[###]".repeat(danger);
+		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`;
 	}
 	scary.update(deltaTime, gameMap);
 }

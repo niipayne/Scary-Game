@@ -26,7 +26,6 @@ export class IdleState extends State {
 	enterState(player) {
 		player.velocity.x = 0;
 		player.velocity.z = 0;
-		// console.log("idling");
 	}
 
 	updateState(player) {
@@ -78,9 +77,6 @@ export class GameOver extends State {
 
 export class WinnerState extends State {
 	enterState(player) {
-		console.log("Winner");
-		player.winn = true;
-		console.log(player.winn);
 		player.scary.topSpeed = 0;
 		player.win();
 	}

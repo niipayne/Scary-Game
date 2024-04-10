@@ -1,15 +1,13 @@
-import { TileNode } from "./TileNode.js";
 import * as THREE from "three";
 import { MapRenderer } from "./MapRenderer";
 import { Graph } from "./Graph";
 import { PriorityQueue } from "../../Util/PriorityQueue";
-import { MazeGenerator } from './MazeGenerator.js';
-import { VectorUtil } from "../../Util/VectorUtil";
+import { MazeGenerator } from "./MazeGenerator.js";
 
 export class GameMap {
 	// Constructor for our GameMap class
 	constructor() {
-		this.start = new THREE.Vector3(-35,0,-35);
+		this.start = new THREE.Vector3(-35, 0, -35);
 
 		this.width = 70;
 		this.depth = 70;

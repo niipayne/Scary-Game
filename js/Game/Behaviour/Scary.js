@@ -12,12 +12,14 @@ export class Scary {
 		this.enemyMesh = [];
 		this.s = [];
 
+		// Sphere used for raycasting to detect the Maynard
 		const geometry = new THREE.SphereGeometry(2.5, 32, 16);
 		const material = new THREE.MeshBasicMaterial({
 			color: 0xffff00,
 			transparent: true,
 			opacity: 0.0,
 		});
+
 		const sphere = new THREE.Mesh(geometry, material);
 		sphere.position.set(0, 7, 0);
 		sphere.castShadow = true;
@@ -37,7 +39,7 @@ export class Scary {
 		this.path = [];
 	}
 
-	// check edges
+	// Check edges of the map for collision detection
 	checkEdges(gameMap) {
 		this.location = this.object.position;
 		let node = gameMap.quantize(this.location);
@@ -93,6 +95,7 @@ export class Scary {
 		this.acceleration.add(force);
 	}
 
+	// Load the Maynard into the scene, animation and logging its loading progress
 	load(scene) {
 		const loader = new FBXLoader();
 		loader.setPath("js/Resources/Scary Zombie Pack/");
@@ -180,10 +183,8 @@ export class Scary {
 
 	followPlayer(gameMap, player) {
 		let playerNode = gameMap.quantize(player.position);
-		// console.log(playerNode, 'player node')
-
 		let npcNode = gameMap.quantize(this.object.position);
-		// console.log(npcNode, 'npc')
+
 		if (npcNode == playerNode) {
 			return this.arrive(player.position, gameMap.tileSize / 2);
 		} else if (playerNode != this.path[this.path.length - 1]) {
@@ -193,6 +194,7 @@ export class Scary {
 		return this.simpleFollow(gameMap);
 	}
 
+	// Called to update the location of the Maynard
 	movement(deltaTime) {
 		this.velocity.addScaledVector(this.acceleration, deltaTime);
 

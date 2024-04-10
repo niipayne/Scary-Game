@@ -1,7 +1,5 @@
-import { ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 import { Character } from './Character.js';
 import { State } from './State';
-import * as THREE from 'three';
 import { TileNode } from '../World/TileNode.js';
 
 

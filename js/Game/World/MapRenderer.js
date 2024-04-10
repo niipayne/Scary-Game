@@ -19,6 +19,7 @@ export class MapRenderer {
 			this.createTile(n);
 		}
 
+		// Loading Textures for the map 
 		const textureLoader = new THREE.TextureLoader();
 		const wallBaseColor = textureLoader.load(
 			"js/Resources/Textures/Veins/Veins_001_basecolor.jpg"
@@ -42,9 +43,7 @@ export class MapRenderer {
 		const groundambientOcculusion = textureLoader.load(
 			"js/Resources/Textures/Ground/Concrete_019_AmbientOcclusion.jpg"
 		);
-		// const groundheight = textureLoader.load(
-		// 	"js/Resources/Textures/Ground/Veins_001_height.jpg"
-		// );
+		
 		const groundnormal = textureLoader.load(
 			"js/Resources/Textures/Ground/Concrete_019_Normal.jpg"
 		);
@@ -88,7 +87,7 @@ export class MapRenderer {
 	}
 
 	createTile(node) {
-		// createTile(i, j, type) {
+	
 
 		let i = node.x;
 		let j = node.z;

@@ -1,10 +1,8 @@
-import { TileNode } from './TileNode.js';
-import * as THREE from 'three';
-import { Graph } from './Graph';
-
+import { TileNode } from "./TileNode.js";
+import * as THREE from "three";
+import { Graph } from "./Graph";
 
 export class MazeGenerator {
-
 	constructor(graph) {
 		this.graph = graph;
 		this.visited = [];
@@ -20,7 +18,7 @@ export class MazeGenerator {
 			}
 		}
 		if (unvisited.length > 0) {
-			let random = Math.floor(Math.random()*unvisited.length);
+			let random = Math.floor(Math.random() * unvisited.length);
 			return unvisited[random];
 		}
 		return null;
@@ -30,7 +28,7 @@ export class MazeGenerator {
 		let x = Math.floor(Math.random() * this.graph.cols);
 		let z = Math.floor(Math.random() * this.graph.rows);
 
-		let start = this.graph.getNode(x,z);
+		let start = this.graph.getNode(x, z);
 		this.generateHelper(start);
 		this.setupGraph();
 	}
@@ -68,12 +66,9 @@ export class MazeGenerator {
 		this.generateHelper(n);
 	}
 
-
 	setupGraph() {
 		for (let n of this.graph.nodes) {
 			n.edges = this.map.get(n);
 		}
 	}
-	
 }
-	
