@@ -10,7 +10,7 @@ import { CameraState } from "./Game/Behaviour/CameraState.js";
 
 import { EnemyState } from "./Game/Behaviour/EnemyState.js";
 import { Scary } from "./Game/Behaviour/Scary.js";
-import { Timer } from 'three/addons/misc/Timer.js';
+import { Timer } from "three/addons/misc/Timer.js";
 import { ThreeMFLoader } from "three/examples/jsm/Addons.js";
 import { VectorUtil } from "./Util/VectorUtil.js";
 
@@ -23,13 +23,16 @@ const camera = new THREE.PerspectiveCamera(
 	1000
 );
 const renderer = new THREE.WebGLRenderer();
+const textureLoader = new THREE.TextureLoader();
+
+console.log(scene);
 
 let cameraBattery = 15;
 let haveBattery = true;
-let batteryStr = '|||||||||||||||';
+let batteryStr = "|||||||||||||||";
 
 // let dangerBar = 20;
-let dangerStr = '';
+let dangerStr = "";
 
 // Create GameMap
 const gameMap = new GameMap();
@@ -38,7 +41,7 @@ const controller = new Controller(document);
 const player = new Player(new THREE.Color(0xff0000));
 
 let scary = new EnemyState(scene, gameMap, camera);
-scary.name = 'spooky_scary';
+scary.name = "spooky_scary";
 
 const timer = new Timer();
 const timerGUI = document.getElementById("flashlight_battery");
@@ -59,7 +62,10 @@ fpCamera.getObject(scene);
 
 // Setup our scene
 function setup() {
-	scene.background = new THREE.Color(0xffffff);
+	// scene.background = new THREE.Color(0xffffff);
+	scene.background = textureLoader.load(
+		"js/Resources/Background/3d-render-tree-landscape-against-night-sky.jpg"
+	);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
@@ -78,22 +84,21 @@ function setup() {
 	// Get a random starting places
 	let startPlayer = gameMap.graph.getNode(0, 0);
 
-	
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);
 
 	const axesHelper = new THREE.AxesHelper(100);
 	scene.add(axesHelper);
 
-	const gridHelper = new THREE.GridHelper(100, 100); 
+	const gridHelper = new THREE.GridHelper(100, 100);
 	scene.add(gridHelper);
 
 	window.addEventListener("resize", onWindowResize, false);
 
 	camera.position.x = -32;
 	camera.position.z = -32;
-	
-	camera.lookAt(0,0,0)
+
+	camera.lookAt(0, 0, 0);
 	// camera.position.y = 35;
 	camera.position.y = 7;
 
@@ -108,38 +113,43 @@ function onWindowResize() {
 	renderer.render(scene, camera);
 }
 
-
 // animate
 function animate() {
 	requestAnimationFrame(animate);
 
 	renderer.render(scene, camera);
-	
+
 	stats.update();
-	
+
 	let deltaTime = clock.getDelta();
 
 	let follow = scary.followPlayer(gameMap, camera);
 	scary.applyForce(follow);
 
 	if (cameraBattery < timer.getElapsed()) {
-		haveBattery = false
+		haveBattery = false;
 	}
 
 	player.update(deltaTime, gameMap, controller, camera);
 	fpCamera.update(deltaTime, scene, haveBattery, camera);
-	
+
 	let node = gameMap.quantize(player.location);
 	let scary_node = gameMap.quantize(scary.location);
 	if (node.type == TileNode.Type.Battery) {
 		gameMap.graph.getNode(node.x, node.z).type = TileNode.Type.Ground;
 		let r = Math.floor(Math.random() * 6);
 		// let r = 5;
-		batteryStr += '|'.repeat(r);
+		batteryStr += "|".repeat(r);
 		cameraBattery += r;
 		haveBattery = true;
-		let dir = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(13, 13))
-		gameMap.arrow(new THREE.Vector3(node.x, 0, node.z), new THREE.Vector3(dir[1].x - node.x, 0, dir[1].z - node.z))
+		let dir = gameMap.astar(
+			gameMap.graph.getNode(node.x, node.z),
+			gameMap.graph.getNode(13, 13)
+		);
+		gameMap.arrow(
+			new THREE.Vector3(node.x, 0, node.z),
+			new THREE.Vector3(dir[1].x - node.x, 0, dir[1].z - node.z)
+		);
 	}
 
 	if (fpCamera.flashlight && haveBattery) {
@@ -154,7 +164,7 @@ function animate() {
 	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
 	
 	if (danger == 0) {
-		timerGUI.innerHTML += `<h2>NOT SAFE!!!!</h2>`		
+		timerGUI.innerHTML += `<h2>NOT SAFE!!!!</h2>`;
 	} else {
 		dangerStr = '[###]'.repeat(danger);
 		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`
