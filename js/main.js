@@ -87,11 +87,11 @@ function setup() {
 	// this is where we start the player
 	player.location = gameMap.localize(startPlayer);
 
-	const axesHelper = new THREE.AxesHelper(100);
-	scene.add(axesHelper);
+	// const axesHelper = new THREE.AxesHelper(100);
+	// scene.add(axesHelper);
 
-	const gridHelper = new THREE.GridHelper(100, 100);
-	scene.add(gridHelper);
+	// const gridHelper = new THREE.GridHelper(100, 100);
+	// scene.add(gridHelper);
 
 	window.addEventListener("resize", onWindowResize, false);
 
