@@ -35,7 +35,32 @@ export class MapRenderer {
 		const roughness = textureLoader.load(
 			"js/Resources/Textures/Veins/Veins_001_roughness.jpg"
 		);
-		let groundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+
+		const groundBaseColor = textureLoader.load(
+			"js/Resources/Textures/Ground/Concrete_019_BaseColor.jpg"
+		);
+		const groundambientOcculusion = textureLoader.load(
+			"js/Resources/Textures/Ground/Concrete_019_AmbientOcclusion.jpg"
+		);
+		// const groundheight = textureLoader.load(
+		// 	"js/Resources/Textures/Ground/Veins_001_height.jpg"
+		// );
+		const groundnormal = textureLoader.load(
+			"js/Resources/Textures/Ground/Concrete_019_Normal.jpg"
+		);
+		const groundroughness = textureLoader.load(
+			"js/Resources/Textures/Ground/Concrete_019_Roughness.jpg"
+		);
+
+		let groundMaterial = new THREE.MeshStandardMaterial({
+			map: groundBaseColor,
+			normalMap: groundnormal,
+			roughnessMap: groundroughness,
+			roughness: 0.5,
+			aoMap: groundambientOcculusion,
+		});
+
+		
 		let batteryMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
 		let wallMaterial = new THREE.MeshStandardMaterial({
 			map: wallBaseColor,
