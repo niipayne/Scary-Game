@@ -237,7 +237,7 @@ export class FirstPersonCamera {
 	}
 
 	update(deltaTime, haveBattery, camera) {
-		// this.checkEdges(this.gameMap);
+		this.checkEdges(this.gameMap);
 		this.moveMent(deltaTime);
 		this.camera = camera;
 		this.haveBatterys = haveBattery;

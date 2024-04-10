@@ -150,18 +150,13 @@ function animate() {
 
 	let danger;
 	danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
-	// console.log(danger)
 	danger = Math.floor((danger) / 25)
-	// if (danger > 6) {
-	// } else {
-	// 	danger = 0
-	// }
 	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
 	
 	if (danger == 0) {
 		timerGUI.innerHTML += `<h2>NOT SAFE!!!!</h2>`		
 	} else {
-		dangerStr = '[####]'.repeat(danger);
+		dangerStr = '[###]'.repeat(danger);
 		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`
 	}
 	scary.update(deltaTime, gameMap);

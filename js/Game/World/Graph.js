@@ -1,5 +1,6 @@
 import { TileNode } from './TileNode.js';
 import * as THREE from 'three';
+import { Pseudorandom } from "./Pseudorandom.js";
 
 
 export class Graph {
@@ -25,13 +26,21 @@ export class Graph {
 	initGraph() {
 		// Create a new tile node
 		// for each index in the grid
+		const pseudorandom = new Pseudorandom();
+		let batteryNodes = new Set();
+
+		for (let i = 0; i < 12; i++) {
+			let x = Math.floor(pseudorandom.halton(3, i, 0, this.cols));
+			let z = Math.floor(pseudorandom.halton(2, i, 0, this.rows));
+			batteryNodes.add(JSON.stringify([x, z]));
+		}
+
 		for (let j = 0; j < this.rows; j++) {
 			for (let i = 0; i < this.cols; i++) {
 
-				let b = Math.random();
 				let type;
 
-				if (b <= 0.05) {
+				if (batteryNodes.has(JSON.stringify([i, j]))) {
 					type = TileNode.Type.Battery;
 				} else {
 					type = TileNode.Type.Ground;
@@ -99,7 +108,7 @@ export class Graph {
 
 	getRandomEmptyTile() {
 		let index = Math.floor(Math.random()*(this.nodes.length));
-		while (this.nodes[index].type == TileNode.Type.Obstacle) {
+		while (this.nodes[index].type == TileNode.Type.Ground) {
 			index = Math.floor(Math.random()*(this.nodes.length));
 		}
 		return this.nodes[index];

@@ -79,7 +79,7 @@ export class GameMap {
 		vector.normalize();
 
 		let origin = this.localize(node);
-		origin.y += 1.5;
+		// origin.y += 0.2;
 		let length = this.tileSize;
 		let hex = 0xffffff;
 
