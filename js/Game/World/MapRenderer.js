@@ -21,19 +21,19 @@ export class MapRenderer {
 
 		const textureLoader = new THREE.TextureLoader();
 		const wallBaseColor = textureLoader.load(
-			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_basecolor.jpg"
+			"js/Resources/Textures/Veins/Veins_001_basecolor.jpg"
 		);
 		const ambientOcculusion = textureLoader.load(
-			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_ambientOcclusion.jpg"
+			"js/Resources/Textures/Veins/Veins_001_ambientOcclusion.jpg"
 		);
 		const height = textureLoader.load(
-			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_height.jpg"
+			"js/Resources/Textures/Veins/Veins_001_height.jpg"
 		);
 		const normal = textureLoader.load(
-			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_normal.jpg"
+			"js/Resources/Textures/Veins/Veins_001_normal.jpg"
 		);
 		const roughness = textureLoader.load(
-			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_roughness.jpg"
+			"js/Resources/Textures/Veins/Veins_001_roughness.jpg"
 		);
 		let groundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 		let batteryMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
