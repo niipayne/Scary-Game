@@ -19,9 +19,33 @@ export class MapRenderer {
 			this.createTile(n);
 		}
 
+		const textureLoader = new THREE.TextureLoader();
+		const wallBaseColor = textureLoader.load(
+			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_basecolor.jpg"
+		);
+		const ambientOcculusion = textureLoader.load(
+			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_ambientOcclusion.jpg"
+		);
+		const height = textureLoader.load(
+			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_height.jpg"
+		);
+		const normal = textureLoader.load(
+			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_normal.jpg"
+		);
+		const roughness = textureLoader.load(
+			"js/Resources/Textures/Walls/Stylized_Stone_Floor_005_roughness.jpg"
+		);
 		let groundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 		let batteryMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
-		let wallMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
+		let wallMaterial = new THREE.MeshStandardMaterial({
+			map: wallBaseColor,
+			normalMap: normal,
+			displacementMap: height,
+			displacementScale: 0.05,
+			roughnessMap: roughness,
+			roughness: 0.5,
+			aoMap: ambientOcculusion,
+		});
 		let endMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
 		let gameObject = new THREE.Group();
