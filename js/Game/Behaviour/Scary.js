@@ -9,6 +9,19 @@ export class Scary {
 		this.object;
 		this.gameMap = gameMap;
 		this.camera = camera;
+		this.enemyMesh = [];
+		this.s = [];
+
+		const geometry = new THREE.SphereGeometry( 6, 32, 16 ); 
+		const material = new THREE.MeshBasicMaterial( { color: 0xffff00,  transparent: true, opacity:0.5} ); 
+		const sphere = new THREE.Mesh( geometry, material ); 
+		sphere.position.set(0,7,0);
+		sphere.castShadow = true;
+		sphere.receiveShadow = true;
+
+		scene.add( sphere );
+		this.s.push(sphere)
+
 
 		this.location = new THREE.Vector3();
 		this.velocity = new THREE.Vector3(0, 0, 0);
@@ -16,7 +29,7 @@ export class Scary {
 
 		this.topSpeed = 1.5;
 		this.mass = 1;
-
+		this.seen = false;
 		this.segment = 0;
 		this.path = [];
 	}
@@ -80,26 +93,35 @@ export class Scary {
 	load(scene) {
 		const loader = new FBXLoader();
 		loader.setPath("js/Resources/Scary Zombie Pack/");
-		loader.load("Ch30_nonPBR.fbx", (fbx) => {
-			fbx.scale.setScalar(0.025);
-			fbx.traverse((c) => {
-				c.castShadow = true;
-			});
+		loader.load(
+			"Ch30_nonPBR.fbx",
+			(fbx) => {
+				fbx.scale.setScalar(0.05);
+				fbx.traverse((c) => {
+					if (c.isMesh) {
+						c.castShadow = true;
+						c.receiveShadow = true;
+						this.enemyMesh.push(c);
+					}
+				});
 
-			const anim = new FBXLoader();
-			anim.setPath("js/Resources/Scary Zombie Pack/");
-			anim.load("zombie walk.fbx", (anim) => {
-				const thing = new THREE.AnimationMixer(fbx);
-				this.mixer.push(thing);
-				const idle = thing.clipAction(anim.animations[0]);
-				idle.play();
-			});
-			scene.add(fbx);
-			this.object = fbx;
-
-			this.object.position.set(20, 5, 20);
-			return this.object;
-		});
+				const anim = new FBXLoader();
+				anim.setPath("js/Resources/Scary Zombie Pack/");
+				anim.load("zombie walk.fbx", (anim) => {
+					const thing = new THREE.AnimationMixer(fbx);
+					this.mixer.push(thing);
+					const idle = thing.clipAction(anim.animations[0]);
+					idle.play();
+				});
+				scene.add(fbx);
+				this.object = fbx;
+				this.object.position.set(20, 5, 20);
+			},
+			(xhr) => {
+				console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+			}
+		);
+		return this.object;
 	}
 
 	arrive(target, radius) {
@@ -117,6 +139,24 @@ export class Scary {
 		let steer = VectorUtil.sub(desired, this.velocity);
 
 		return steer;
+	}
+
+	followAway(gameMap, location) {
+		// let playerNode = gameMap.quantize(player.location);
+		// console.log(location)
+		let playerNode = gameMap.quantize(location);
+		console.log(playerNode, 'follow away player node')
+
+		let npcNode = gameMap.quantize(this.object.position);
+		console.log(npcNode, 'follow away npc')
+
+		if (npcNode == playerNode) {
+			return this.arrive(location, gameMap.tileSize / 2);
+		} else if (playerNode != this.path[this.path.length - 1]) {
+			this.path = gameMap.astar(npcNode, playerNode);
+			this.segment = 1;
+		}
+		return this.simpleFollow(gameMap);
 	}
 
 	simpleFollow(gameMap) {
@@ -141,9 +181,12 @@ export class Scary {
 
 	followPlayer(gameMap, player) {
 		// let playerNode = gameMap.quantize(player.location);
+		// console.log(player.position)
 		let playerNode = gameMap.quantize(player.position);
-		let npcNode = gameMap.quantize(this.object.position);
+		console.log(playerNode, 'player node')
 
+		let npcNode = gameMap.quantize(this.object.position);
+		console.log(npcNode, 'npc')
 		if (npcNode == playerNode) {
 			return this.arrive(player.position, gameMap.tileSize / 2);
 		} else if (playerNode != this.path[this.path.length - 1]) {
@@ -173,9 +216,49 @@ export class Scary {
 		}
 	}
 
+	flee(gameMap, player) {
+		// let playerNode = gameMap.quantize(player.position);
+
+		// let npcNode = gameMap.quantize(this.object.position);
+
+		// if (npcNode == playerNode) {
+		// 	return this.arrive(player.position, gameMap.tileSize / 2);
+		// } else if (playerNode != this.path[this.path.length - 1]) {
+		// 	this.path = gameMap.astar(npcNode, playerNode);
+		// 	this.segment = 1;
+		// }
+		// return this.fleeFollow(gameMap);
+	}
+
+	fleeFollow(gameMap) {
+		// let steer = new THREE.Vector3();
+
+		// let goTo = gameMap.localize(this.path[this.segment]);
+
+		// let distance = goTo.distanceTo(this.object.position);
+
+		// if (distance < gameMap.tileSize / 2) {
+		// 	if (this.segment == this.path.length - 1) {
+		// 		steer = this.arrive(goTo, gameMap.tileSize / 2);
+		// 	} else {
+		// 		this.segment++;
+		// 	}
+		// } else {
+		// 	steer = this.seek(goTo).multiplyScalar(-1);
+		// }
+
+		// return steer;
+	}
+
 	update(deltaTime, gameMap) {
-		this.mixer.map((m) => m.update(deltaTime));
+		// console.log(this.location)
+		// console.log(this.s[0].position)
+		// this.mixer.map((m) => m.update(deltaTime));
+		let new_loc = this.location.clone();
+		// console.log(new_loc)
+		this.s[0].position.set(new_loc.x, 7, new_loc.z);
 		this.movement(deltaTime);
 		this.checkEdges(gameMap);
+
 	}
 }

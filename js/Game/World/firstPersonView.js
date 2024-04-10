@@ -15,17 +15,23 @@ export class FirstPersonCamera {
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
 
-		// this.raycaster = new THREE.Raycaster();
-
 		this.moveForward = false;
 		this.moveBackward = false;
 		this.moveLeft = false;
 		this.moveRight = false;
 		this.canJump = false;
-		this.setup(this.controls);
 		this.flashlight = false;
 		this.size = 1.5;
 		this.haveBatterys;
+		this.ray = new THREE.Raycaster(
+			new THREE.Vector3(),
+			new THREE.Vector3(),
+			0, 
+			25
+		);
+		this.target = new THREE.Vector3();
+		this.intersects = [];
+		this.setup(this.controls);
 	}
 
 	setup(controls) {
@@ -38,9 +44,6 @@ export class FirstPersonCamera {
 		this.camera.add(this.spotLight.target);
 		this.spotLight.position.set(0, 0, 1);
 		this.spotLight.target = this.camera;
-
-		// this.raycaster.setFromCamera(new THREE.Vector2(this.camera.quaternion.x, this.camera.quaternion.z), this.camera)
-		// const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
 
 		instructions.addEventListener("click", function () {
 			controls.lock();
@@ -60,6 +63,25 @@ export class FirstPersonCamera {
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
 		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
 		document.addEventListener("mouseup", (e) => this.flashOff(e), false);
+		// document.addEventListener("mousedown", (e) => this.casting(e), false);
+	}
+
+	casting() {
+		// console.log(event.button)
+		// switch (event.button) {
+		// 	case 0:
+		// 		console.log('click')
+		// }
+		this.camera.getWorldDirection(this.target);
+		this.ray.set(this.camera.position, this.target.normalize());
+		console.log('here boi')
+		this.intersects = this.ray.intersectObjects(this.scary.s, false);
+		if (this.intersects.length > 0) {
+			console.log('seen')
+			this.scary.seen = true;
+		} else {
+			this.scary.seen = false;
+		}
 	}
 
 	// check edges
@@ -108,13 +130,12 @@ export class FirstPersonCamera {
 		if (this.haveBatterys) {
 			this.flashlight = true;
 			this.spotLight.intensity = 1;
-			// const intersecs = this.raycaster.intersectObjects(this.scene.children, true)
-			// console.log(intersecs[0])
 		}
 	}
 
 	flashOff(event) {
 		this.flashlight = false;
+		this.scary.seen = false;
 		this.spotLight.intensity = 0;
 	}
 
@@ -203,8 +224,9 @@ export class FirstPersonCamera {
 		this.haveBatterys = haveBattery;
 		if (!haveBattery) {
 			this.flashOff()  
-		} else {
-			
+		}
+		if (this.flashlight) {
+			this.casting()
 		}
 	}
 

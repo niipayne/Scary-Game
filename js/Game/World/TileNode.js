@@ -6,7 +6,6 @@ export class TileNode {
 		End: Symbol('end')
 	})
 
-
 	// Node Constructor
 	constructor(id, x, z, type) {
 		this.id = id;
@@ -16,8 +15,6 @@ export class TileNode {
 		this.edges = [];
 
 		this.type = type;
-
-
 	}
 
 	// Try to add an edge to this node

@@ -57,7 +57,7 @@ export class MovingState extends State {
 export class GameOver extends State {
 	enterState(player) {
 		console.log("DEAD");
-		player.caught();
+		// player.caught();
 	}
 
 	updateState(player) {}

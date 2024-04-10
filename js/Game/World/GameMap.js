@@ -43,8 +43,8 @@ export class GameMap {
 		this.graph.initGraph();
 		this.graph.initEdges();
 
-		let mazeGenerator = new MazeGenerator(this.graph);
-		mazeGenerator.generate();
+		// let mazeGenerator = new MazeGenerator(this.graph);
+		// mazeGenerator.generate();
 		// Set the game object to our rendering
 		this.gameObject = this.mapRenderer.createRendering(this.graph.nodes);
 	}

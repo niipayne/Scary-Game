@@ -73,7 +73,7 @@ export class MapRenderer {
 			geometry,
 		]);
 
-		this.buildWalls(node, x, y, z);
+		// this.buildWalls(node, x, y, z);
 
 
 

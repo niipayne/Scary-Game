@@ -29,7 +29,7 @@ let haveBattery = true;
 let batteryStr = '||||||||||||||||||||';
 
 let dangerBar = 20;
-let dargerStr = '||||||||||||||||||||';
+let dangerStr = '||||||||||||||||||||';
 
 // Create GameMap
 const gameMap = new GameMap();
@@ -39,6 +39,7 @@ const player = new Player(new THREE.Color(0xff0000));
 // let npc = new NPC(new THREE.Color(0x000000));
 
 let scary = new EnemyState(scene, gameMap, camera);
+scary.name = 'spooky_scary';
 
 const timer = new Timer();
 const timerGUI = document.getElementById("flashlight_battery");
@@ -67,8 +68,8 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
-	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
-	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
+	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
+	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
 	// let directionalLight = new THREE.DirectionalLight(0xffffff, 2);
 	directionalLight.position.set(0, 5, 5);
 	scene.add(directionalLight);
@@ -78,7 +79,7 @@ function setup() {
 	scene.add(player.gameObject);
 
 	// Get a random starting places
-	let startNPC = gameMap.graph.getNode(10, 10);
+	// let startNPC = gameMap.graph.getNode(10, 10);
 	let startPlayer = gameMap.graph.getNode(0, 0);
 
 	
@@ -99,9 +100,9 @@ function setup() {
 
 	camera.position.x = -32;
 	camera.position.z = -32;
-	// camera.position.y = 55;
-
+	
 	camera.lookAt(0,0,0)
+	// camera.position.y = 35;
 	camera.position.y = 7;
 
 	//First call to animate
@@ -155,16 +156,18 @@ function animate() {
 
 	let danger;
 	if (fpCamera.flashlight && haveBattery) {
-		danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
+		// danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
 		timer.update();
+		// console.log(scary)
 	} else {
-		timer.reset()
+		timer.reset();
 	}
 	// console.log(gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length)
 	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
 
-	timerGUI.innerHTML += '<p>Danger Detector</p>'
-	// const delta = timer.getDelta()
+	// let dm = Math.floor()
+	// console.log(danger)
+	// timerGUI.innerHTML += `<p>Danger Detector</p><h2>${dangerStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
 	scary.update(deltaTime, gameMap);
 }
 
