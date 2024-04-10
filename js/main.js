@@ -74,6 +74,21 @@ function setup() {
 	directionalLight.position.set(0, 5, 5);
 	scene.add(directionalLight);
 
+	// Add the characters to the scene
+	scene.add(player.gameObject);
+
+	// Get a random starting places
+	let startPlayer = gameMap.graph.getNode(0, 0);
+
+	// this is where we start the player
+	player.location = gameMap.localize(startPlayer);
+
+	// const axesHelper = new THREE.AxesHelper(100);
+	// scene.add(axesHelper);
+
+	// const gridHelper = new THREE.GridHelper(100, 100);
+	// scene.add(gridHelper);
+
 	window.addEventListener("resize", onWindowResize, false);
 
 	camera.position.x = -32;
@@ -137,23 +152,15 @@ function animate() {
 	}
 
 	let danger;
-	danger = gameMap.astar(
-		gameMap.graph.getNode(node.x, node.z),
-		gameMap.graph.getNode(scary_node.x, scary_node.z)
-	).length;
-
-	danger = Math.floor(danger / 25);
-
-	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(
-		Math.floor(timer.getElapsed()),
-		cameraBattery
-	)}</h2>`;
-
+	danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
+	danger = Math.floor((danger) / 25)
+	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
+	
 	if (danger == 0) {
 		timerGUI.innerHTML += `<h2>NOT SAFE!!!!</h2>`;
 	} else {
-		dangerStr = "[####]".repeat(danger);
-		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`;
+		dangerStr = '[###]'.repeat(danger);
+		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`
 	}
 	scary.update(deltaTime, gameMap);
 }
