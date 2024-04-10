@@ -27,6 +27,23 @@ How to Play:
 <h4>Additional Topics</h4>
 - For additional topics we implemented seek and arrive which can both be found in the "Scary.js". To place the batteries randomly on the map we used Halton sequence generator which can be found in the "Pseudorandom.js" file and is used in the "Graph.js" on line 28.
 
+<h3>Contributions</h3>
+Kris:
+- Maze generation
+- Flashlight Battery
+- Batteries 
+- Goal and Starting states
+- Maynard detection/ Teleportation (Raycasting)
+- Enemy States
+- Pseudorandomness
+Nii:
+- First Person Camera
+- Flashlight
+- Textures
+- Pathfinding
+- Collision Detection
+- Player States
+- Maynard
 
 <h3>About</h3>
 You play in first person view equipped with only a flashlight and have to navigate a maze to reach the goal. All whilst being chased by a T-posing Maynard that knows your exact location at all times.
