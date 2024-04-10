@@ -25,8 +25,6 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 const textureLoader = new THREE.TextureLoader();
 
-console.log(scene);
-
 let cameraBattery = 15;
 let haveBattery = true;
 let batteryStr = "|||||||||||||||";
@@ -62,7 +60,6 @@ fpCamera.getObject(scene);
 
 // Setup our scene
 function setup() {
-	// scene.background = new THREE.Color(0xffffff);
 	scene.background = textureLoader.load(
 		"js/Resources/Background/3d-render-tree-landscape-against-night-sky.jpg"
 	);
@@ -73,33 +70,15 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
-	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
-	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
+	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.02);
 	directionalLight.position.set(0, 5, 5);
 	scene.add(directionalLight);
-
-	// Add the characters to the scene
-	scene.add(player.gameObject);
-
-	// Get a random starting places
-	let startPlayer = gameMap.graph.getNode(0, 0);
-
-	// this is where we start the player
-	player.location = gameMap.localize(startPlayer);
-
-	const axesHelper = new THREE.AxesHelper(100);
-	scene.add(axesHelper);
-
-	const gridHelper = new THREE.GridHelper(100, 100);
-	scene.add(gridHelper);
 
 	window.addEventListener("resize", onWindowResize, false);
 
 	camera.position.x = -32;
 	camera.position.z = -32;
-
 	camera.lookAt(0, 0, 0);
-	// camera.position.y = 35;
 	camera.position.y = 7;
 
 	//First call to animate
@@ -138,7 +117,6 @@ function animate() {
 	if (node.type == TileNode.Type.Battery) {
 		gameMap.graph.getNode(node.x, node.z).type = TileNode.Type.Ground;
 		let r = Math.floor(Math.random() * 6);
-		// let r = 5;
 		batteryStr += "|".repeat(r);
 		cameraBattery += r;
 		haveBattery = true;
@@ -163,12 +141,9 @@ function animate() {
 		gameMap.graph.getNode(node.x, node.z),
 		gameMap.graph.getNode(scary_node.x, scary_node.z)
 	).length;
-	// console.log(danger)
+
 	danger = Math.floor(danger / 25);
-	// if (danger > 6) {
-	// } else {
-	// 	danger = 0
-	// }
+
 	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(
 		Math.floor(timer.getElapsed()),
 		cameraBattery

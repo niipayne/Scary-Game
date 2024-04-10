@@ -213,34 +213,6 @@ export class Scary {
 		}
 	}
 
-	flee(gameMap, player) {
-		// let playerNode = gameMap.quantize(player.position);
-		// let npcNode = gameMap.quantize(this.object.position);
-		// if (npcNode == playerNode) {
-		// 	return this.arrive(player.position, gameMap.tileSize / 2);
-		// } else if (playerNode != this.path[this.path.length - 1]) {
-		// 	this.path = gameMap.astar(npcNode, playerNode);
-		// 	this.segment = 1;
-		// }
-		// return this.fleeFollow(gameMap);
-	}
-
-	fleeFollow(gameMap) {
-		// let steer = new THREE.Vector3();
-		// let goTo = gameMap.localize(this.path[this.segment]);
-		// let distance = goTo.distanceTo(this.object.position);
-		// if (distance < gameMap.tileSize / 2) {
-		// 	if (this.segment == this.path.length - 1) {
-		// 		steer = this.arrive(goTo, gameMap.tileSize / 2);
-		// 	} else {
-		// 		this.segment++;
-		// 	}
-		// } else {
-		// 	steer = this.seek(goTo).multiplyScalar(-1);
-		// }
-		// return steer;
-	}
-
 	update(deltaTime, gameMap) {
 		let new_loc = this.location.clone();
 		this.s[0].position.set(new_loc.x, 7, new_loc.z);
