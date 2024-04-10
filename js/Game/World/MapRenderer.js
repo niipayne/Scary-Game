@@ -67,8 +67,6 @@ export class MapRenderer {
 
 		this.buildWalls(node, x, y, z);
 
-
-
 		if (type === TileNode.Type.End) {
 			this.endGeometries = BufferGeometryUtils.mergeGeometries([
 				this.endGeometries,

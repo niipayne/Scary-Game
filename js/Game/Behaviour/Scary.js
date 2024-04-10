@@ -12,16 +12,19 @@ export class Scary {
 		this.enemyMesh = [];
 		this.s = [];
 
-		const geometry = new THREE.SphereGeometry( 2.5, 32, 16 ); 
-		const material = new THREE.MeshBasicMaterial( { color: 0xffff00,  transparent: true, opacity:0.5} ); 
-		const sphere = new THREE.Mesh( geometry, material ); 
-		sphere.position.set(0,7,0);
+		const geometry = new THREE.SphereGeometry(2.5, 32, 16);
+		const material = new THREE.MeshBasicMaterial({
+			color: 0xffff00,
+			transparent: true,
+			opacity: 0.0,
+		});
+		const sphere = new THREE.Mesh(geometry, material);
+		sphere.position.set(0, 7, 0);
 		sphere.castShadow = true;
 		sphere.receiveShadow = true;
 
-		scene.add( sphere );
-		this.s.push(sphere)
-
+		scene.add(sphere);
+		this.s.push(sphere);
 
 		this.location = new THREE.Vector3();
 		this.velocity = new THREE.Vector3(0, 0, 0);
@@ -142,15 +145,15 @@ export class Scary {
 	}
 
 	followAway(gameMap) {
-		if (Math.random() < 0.002){
-			let runLocation = Math.floor(Math.random() * 3)
-			console.log(runLocation)
-			if (runLocation == 0){
-				this.location.set(32, 7, -32)
+		if (Math.random() < 0.002) {
+			let runLocation = Math.floor(Math.random() * 3);
+			console.log(runLocation);
+			if (runLocation == 0) {
+				this.location.set(32, 7, -32);
 			} else if (runLocation == 1) {
-				this.location.set(-32, 7, -32)
+				this.location.set(-32, 7, -32);
 			} else {
-				this.location.set(-32, 7, 32)
+				this.location.set(-32, 7, 32);
 			}
 		}
 	}
@@ -212,9 +215,7 @@ export class Scary {
 
 	flee(gameMap, player) {
 		// let playerNode = gameMap.quantize(player.position);
-
 		// let npcNode = gameMap.quantize(this.object.position);
-
 		// if (npcNode == playerNode) {
 		// 	return this.arrive(player.position, gameMap.tileSize / 2);
 		// } else if (playerNode != this.path[this.path.length - 1]) {
@@ -226,11 +227,8 @@ export class Scary {
 
 	fleeFollow(gameMap) {
 		// let steer = new THREE.Vector3();
-
 		// let goTo = gameMap.localize(this.path[this.segment]);
-
 		// let distance = goTo.distanceTo(this.object.position);
-
 		// if (distance < gameMap.tileSize / 2) {
 		// 	if (this.segment == this.path.length - 1) {
 		// 		steer = this.arrive(goTo, gameMap.tileSize / 2);
@@ -240,7 +238,6 @@ export class Scary {
 		// } else {
 		// 	steer = this.seek(goTo).multiplyScalar(-1);
 		// }
-
 		// return steer;
 	}
 
@@ -249,6 +246,5 @@ export class Scary {
 		this.s[0].position.set(new_loc.x, 7, new_loc.z);
 		this.movement(deltaTime);
 		this.checkEdges(gameMap);
-
 	}
 }

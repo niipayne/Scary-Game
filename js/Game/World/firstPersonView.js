@@ -15,8 +15,6 @@ export class FirstPersonCamera {
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
 
-		this.winn = false;
-
 		this.moveForward = false;
 		this.moveBackward = false;
 		this.moveLeft = false;
@@ -28,7 +26,7 @@ export class FirstPersonCamera {
 		this.ray = new THREE.Raycaster(
 			new THREE.Vector3(),
 			new THREE.Vector3(),
-			0, 
+			0,
 			25
 		);
 		this.target = new THREE.Vector3();
@@ -39,10 +37,8 @@ export class FirstPersonCamera {
 	setup(controls) {
 		const blocker = document.getElementById("blocker");
 		const instructions = document.getElementById("instructions");
-		const gameOver = document.getElementById("gameOver");
-		const displaye = document.getElementById("displaye");
-		const win = document.getElementById("winner");
-		const winDiv = document.getElementById("winnerDiv");
+
+		const penScare = document.getElementById("penguin_jumpscare");
 
 		this.camera.add(this.spotLight);
 		this.camera.add(this.spotLight.target);
@@ -59,24 +55,13 @@ export class FirstPersonCamera {
 		});
 
 		controls.addEventListener("unlock", function () {
-			if (!this.winn) {
-				win.style.display = "block"
-				winDiv.style.display = "block"
-			} else {
-				gameOver.style.display = "block";
-				displaye.style.display = "block";
-			}
+			console.log("FIN");
 		});
 
-		// controls.addEventListener("winner", function () {
-		// 	win.style.display = "block"
-		// 	winDiv.style.display = "block"
-		// })
 		document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
 		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
 		document.addEventListener("mouseup", (e) => this.flashOff(e), false);
-		
 	}
 
 	casting() {
@@ -84,7 +69,7 @@ export class FirstPersonCamera {
 		this.ray.set(this.camera.position, this.target.normalize());
 		this.intersects = this.ray.intersectObjects(this.scary.s, false);
 		if (this.intersects.length > 0) {
-			console.log('seen')
+			console.log("seen");
 			this.scary.seen = true;
 		} else {
 			this.scary.seen = false;
@@ -130,11 +115,33 @@ export class FirstPersonCamera {
 	}
 
 	caught() {
+		const gameOver = document.getElementById("gameOver");
+		const displaye = document.getElementById("displaye");
+		const penScare = document.getElementById("penguin_jumpscare");
+		const generic = document.getElementById("generic");
+		const lobster = document.getElementById("lobster");
+		const money = document.getElementById("money");
+		const mask = document.getElementById("mask");
+		const taxes = document.getElementById("taxes");
+		let scareArray = [];
+		let imageArray = [];
+		scareArray.push(penScare, generic, lobster);
+		imageArray.push(money, mask, taxes);
+		let randomInteger = Math.floor(Math.random() * 3);
+		scareArray[randomInteger].play();
+		imageArray[randomInteger].style.display = "block";
+		gameOver.style.display = "block";
+		displaye.style.display = "block";
 		this.controls.unlock();
 	}
 
 	win() {
-		this.winn = true;
+		const win = document.getElementById("winner");
+		const winDiv = document.getElementById("winnerDiv");
+		const winSound = document.getElementById("victory_sound");
+		win.style.display = "block";
+		winDiv.style.display = "block";
+		winSound.play();
 		this.controls.unlock();
 	}
 
@@ -230,15 +237,15 @@ export class FirstPersonCamera {
 	}
 
 	update(deltaTime, haveBattery, camera) {
-		this.checkEdges(this.gameMap);
+		// this.checkEdges(this.gameMap);
 		this.moveMent(deltaTime);
 		this.camera = camera;
 		this.haveBatterys = haveBattery;
 		if (!haveBattery) {
-			this.flashOff()  
+			this.flashOff();
 		}
 		if (this.flashlight) {
-			this.casting()
+			this.casting();
 		}
 	}
 

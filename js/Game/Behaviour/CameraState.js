@@ -33,7 +33,10 @@ export class IdleState extends State {
 		if (player.moving()) {
 			player.switchState(new MovingState());
 		}
-		if (player.camera.position.distanceTo(player.scary.object.position) < 2.7 && !player.scary.seen) {
+		if (
+			player.camera.position.distanceTo(player.scary.object.position) < 2.7 &&
+			!player.scary.seen
+		) {
 			player.switchState(new GameOver());
 		}
 	}
@@ -43,18 +46,22 @@ export class MovingState extends State {
 	enterState(player) {}
 
 	updateState(player) {
-		let node = player.gameMap.quantize(player.camera.position)
+		let node = player.gameMap.quantize(player.camera.position);
 
-		if (player.gameMap.graph.getNode(node.x, node.z).type == TileNode.Type.End) {
+		if (
+			player.gameMap.graph.getNode(node.x, node.z).type == TileNode.Type.End
+		) {
 			// console.log('Winner')
 			player.switchState(new WinnerState());
-
 		}
 		if (!player.moving()) {
 			player.switchState(new IdleState());
 		} else {
 		}
-		if (player.camera.position.distanceTo(player.scary.object.position) < 2.7 && !player.scary.seen) {
+		if (
+			player.camera.position.distanceTo(player.scary.object.position) < 2.7 &&
+			!player.scary.seen
+		) {
 			player.switchState(new GameOver());
 		}
 	}
@@ -70,13 +77,13 @@ export class GameOver extends State {
 }
 
 export class WinnerState extends State {
-
 	enterState(player) {
-		console.log('Winner');
+		console.log("Winner");
+		player.winn = true;
+		console.log(player.winn);
+		player.scary.topSpeed = 0;
 		player.win();
 	}
 
-	updateState(player) {
-	}
-  
+	updateState(player) {}
 }

@@ -36,6 +36,7 @@
 			width: 100%;
 			height: 100%;
 			background-color: rgba(0, 0, 0, 0.5);
+
 			display: none;
 		}
 
@@ -47,7 +48,7 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
-
+			z-index: 1000;
 			text-align: center;
 			font-size: 100px;
 			cursor: pointer;
@@ -64,6 +65,14 @@
 		}
 
 		#winner {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			display: none;
+		}
+
+		#winnerDiv {
 			width: 100%;
 			height: 100%;
 
@@ -78,10 +87,29 @@
 			color: red;
 			display: none;
 		}
+
+		img {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			display: none;
+		}
 	</style>
 </head>
 
 <body>
+	<audio id="penguin_jumpscare" src="js/Resources/Audio/penguinz0-jumpscare.mp3"></audio>
+	<audio id="victory_sound" src="js/Resources/Audio/victory_sJDDywi.mp3"></audio>
+	<audio id="lobster" src="js/Resources/Audio/game-jumpscare-scream.mp3"></audio>
+	<audio id="generic" src="js/Resources/Audio/lobster-jumpscare.mp3"></audio>
+	<img id="money" src="js/Resources/Images/no money.jpg" alt="">
+	<img id="mask" src="js/Resources/Images/sadmask.jpg" alt="">
+	<img id="taxes" src="js/Resources/Images/taxes.jpg" alt="">
 	<script type="module" src="/js/main.js"></script>
 	<div id="blocker">
 		<div id="instructions">
@@ -90,9 +118,8 @@
 			</p>
 			<p>
 				Move: WASD<br />
-				Jump: SPACE<br />
 				Look: MOUSE<br />
-				Flashlight: CLICK
+				Flashlight: HOLD LEFT CLICK
 			</p>
 		</div>
 	</div>
@@ -106,7 +133,7 @@
 	<div id="flashlight_battery">
 	</div>
 	<div id="winner">
-		<div id="winnderDiv">
+		<div id="winnerDiv">
 			<p>Winner</p>
 		</div>
 	</div>
