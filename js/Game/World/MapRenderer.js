@@ -22,7 +22,7 @@ export class MapRenderer {
 		let groundMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 		let batteryMaterial = new THREE.MeshStandardMaterial({ color: 0xffff00 });
 		let wallMaterial = new THREE.MeshStandardMaterial({ color: 0x000000 });
-		let endMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+		let endMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
 
 		let gameObject = new THREE.Group();
 		let ground = new THREE.Mesh(this.groundGeometries, groundMaterial);

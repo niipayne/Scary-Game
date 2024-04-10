@@ -10,9 +10,7 @@ export class Player extends Character {
 	constructor(colour) {
 		super(colour);
 		this.frictionMagnitude = 20;
-		// let coneMat = new THREE.
 
-		// State
 		this.state = new IdleState();
 
 		this.state.enterState(this);
@@ -58,6 +56,27 @@ export class MovingState extends State {
 		if (!controller.moving()) {
 			player.switchState(new IdleState());
 		} else {
+			let node = gameMap.quantize(player.location)
+			if (gameMap.graph.getNode(node.x, node.z).type == TileNode.Type.End) {
+				console.log('Winner')
+				player.switchState(new WinnerState());
+
+			}
+		}	
+	}
+  
+}
+
+export class WinnerState extends State {
+
+	enterState(player) {
+	}
+
+	updateState(player, controller, camera, gameMap) {
+		if (!controller.moving()) {
+			player.switchState(new IdleState());
+		} else {
+			player.location = camera.position.clone()
 			let node = gameMap.quantize(player.location)
 			if (gameMap.graph.getNode(node.x, node.z).type == TileNode.Type.End) {
 				console.log('Winner')

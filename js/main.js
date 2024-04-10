@@ -24,12 +24,12 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-let cameraBattery = 20;
+let cameraBattery = 15;
 let haveBattery = true;
-let batteryStr = '||||||||||||||||||||';
+let batteryStr = '|||||||||||||||';
 
-let dangerBar = 20;
-let dangerStr = '||||||||||||||||||||';
+// let dangerBar = 20;
+let dangerStr = '';
 
 // Create GameMap
 const gameMap = new GameMap();
@@ -67,8 +67,8 @@ function setup() {
 	gameMap.init(scene);
 	scene.add(gameMap.gameObject);
 
-	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
-	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
+	// let directionalLight = new THREE.DirectionalLight(0xffffff, 0.1);
+	let directionalLight = new THREE.DirectionalLight(0xffffff, 0.01);
 	directionalLight.position.set(0, 5, 5);
 	scene.add(directionalLight);
 
@@ -133,8 +133,8 @@ function animate() {
 	let scary_node = gameMap.quantize(scary.location);
 	if (node.type == TileNode.Type.Battery) {
 		gameMap.graph.getNode(node.x, node.z).type = TileNode.Type.Ground;
-		// let r = Math.floor(Math.random() * 10);
-		let r = 6;
+		let r = Math.floor(Math.random() * 6);
+		// let r = 5;
 		batteryStr += '|'.repeat(r);
 		cameraBattery += r;
 		haveBattery = true;
@@ -142,18 +142,28 @@ function animate() {
 		gameMap.arrow(new THREE.Vector3(node.x, 0, node.z), new THREE.Vector3(dir[1].x - node.x, 0, dir[1].z - node.z))
 	}
 
-	let danger;
 	if (fpCamera.flashlight && haveBattery) {
-		// danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
 		timer.update();
 	} else {
 		timer.reset();
 	}
-	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
 
-	// let dm = Math.floor()
+	let danger;
+	danger = gameMap.astar(gameMap.graph.getNode(node.x, node.z), gameMap.graph.getNode(scary_node.x, scary_node.z)).length
 	// console.log(danger)
-	// timerGUI.innerHTML += `<p>Danger Detector</p><h2>${dangerStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
+	danger = Math.floor((danger) / 25)
+	// if (danger > 6) {
+	// } else {
+	// 	danger = 0
+	// }
+	timerGUI.innerHTML = `<p>Flashlight Battery</p><h2>${batteryStr.slice(Math.floor(timer.getElapsed()), cameraBattery)}</h2>`
+	
+	if (danger == 0) {
+		timerGUI.innerHTML += `<h2>NOT SAFE!!!!</h2>`		
+	} else {
+		dangerStr = '[####]'.repeat(danger);
+		timerGUI.innerHTML += `<p>Saftey Meter</p><h2>${dangerStr}</h2>`
+	}
 	scary.update(deltaTime, gameMap);
 }
 

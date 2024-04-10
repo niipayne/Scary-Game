@@ -15,6 +15,8 @@ export class FirstPersonCamera {
 		this.controls = new PointerLockControls(camera, domElement);
 		this.gameMap = gameMap;
 
+		this.winn = false;
+
 		this.moveForward = false;
 		this.moveBackward = false;
 		this.moveLeft = false;
@@ -39,6 +41,8 @@ export class FirstPersonCamera {
 		const instructions = document.getElementById("instructions");
 		const gameOver = document.getElementById("gameOver");
 		const displaye = document.getElementById("displaye");
+		const win = document.getElementById("winner");
+		const winDiv = document.getElementById("winnerDiv");
 
 		this.camera.add(this.spotLight);
 		this.camera.add(this.spotLight.target);
@@ -55,20 +59,29 @@ export class FirstPersonCamera {
 		});
 
 		controls.addEventListener("unlock", function () {
-			gameOver.style.display = "block";
-			displaye.style.display = "block";
+			if (!this.winn) {
+				win.style.display = "block"
+				winDiv.style.display = "block"
+			} else {
+				gameOver.style.display = "block";
+				displaye.style.display = "block";
+			}
 		});
 
+		// controls.addEventListener("winner", function () {
+		// 	win.style.display = "block"
+		// 	winDiv.style.display = "block"
+		// })
 		document.addEventListener("keydown", (e) => this.onKeyDown(e), false);
 		document.addEventListener("keyup", (e) => this.onKeyUp(e), false);
 		document.addEventListener("mousedown", (e) => this.flashOn(e), false);
 		document.addEventListener("mouseup", (e) => this.flashOff(e), false);
+		
 	}
 
 	casting() {
 		this.camera.getWorldDirection(this.target);
 		this.ray.set(this.camera.position, this.target.normalize());
-		// console.log('here boi')
 		this.intersects = this.ray.intersectObjects(this.scary.s, false);
 		if (this.intersects.length > 0) {
 			console.log('seen')
@@ -117,6 +130,11 @@ export class FirstPersonCamera {
 	}
 
 	caught() {
+		this.controls.unlock();
+	}
+
+	win() {
+		this.winn = true;
 		this.controls.unlock();
 	}
 

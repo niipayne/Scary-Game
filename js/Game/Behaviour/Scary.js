@@ -12,7 +12,7 @@ export class Scary {
 		this.enemyMesh = [];
 		this.s = [];
 
-		const geometry = new THREE.SphereGeometry( 6, 32, 16 ); 
+		const geometry = new THREE.SphereGeometry( 2.5, 32, 16 ); 
 		const material = new THREE.MeshBasicMaterial( { color: 0xffff00,  transparent: true, opacity:0.5} ); 
 		const sphere = new THREE.Mesh( geometry, material ); 
 		sphere.position.set(0,7,0);
@@ -96,7 +96,7 @@ export class Scary {
 		loader.load(
 			"Ch30_nonPBR.fbx",
 			(fbx) => {
-				fbx.scale.setScalar(0.05);
+				fbx.scale.setScalar(0.025);
 				fbx.traverse((c) => {
 					if (c.isMesh) {
 						c.castShadow = true;
@@ -115,7 +115,7 @@ export class Scary {
 				});
 				scene.add(fbx);
 				this.object = fbx;
-				this.object.position.set(20, 5, 20);
+				this.object.position.set(32, 5, 32);
 			},
 			(xhr) => {
 				console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -141,20 +141,18 @@ export class Scary {
 		return steer;
 	}
 
-	followAway(gameMap, location) {
-		let playerNode = gameMap.quantize(location);
-		// console.log(playerNode, 'follow away player node')
-
-		let npcNode = gameMap.quantize(this.object.position);
-		// console.log(npcNode, 'follow away npc')
-
-		if (npcNode == playerNode) {
-			return this.arrive(location, gameMap.tileSize / 2);
-		} else if (playerNode != this.path[this.path.length - 1]) {
-			this.path = gameMap.astar(npcNode, playerNode);
-			this.segment = 1;
+	followAway(gameMap) {
+		if (Math.random() < 0.002){
+			let runLocation = Math.floor(Math.random() * 3)
+			console.log(runLocation)
+			if (runLocation == 0){
+				this.location.set(32, 7, -32)
+			} else if (runLocation == 1) {
+				this.location.set(-32, 7, -32)
+			} else {
+				this.location.set(-32, 7, 32)
+			}
 		}
-		return this.simpleFollow(gameMap);
 	}
 
 	simpleFollow(gameMap) {
@@ -247,11 +245,7 @@ export class Scary {
 	}
 
 	update(deltaTime, gameMap) {
-		// console.log(this.location)
-		// console.log(this.s[0].position)
-		// this.mixer.map((m) => m.update(deltaTime));
 		let new_loc = this.location.clone();
-		// console.log(new_loc)
 		this.s[0].position.set(new_loc.x, 7, new_loc.z);
 		this.movement(deltaTime);
 		this.checkEdges(gameMap);
